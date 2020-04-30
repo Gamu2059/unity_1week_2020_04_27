@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class RedPuniController : ControllableMonoBehavior
+public class RedPuniController : ControllableMonoBehavior, IPuni
 {
     #region Define
 
@@ -63,6 +63,7 @@ public class RedPuniController : ControllableMonoBehavior
     #region Field
 
     private StateMachine<E_STATE, RedPuniController> m_StateMachine;
+    public bool IsBluePuni => false;
 
     #endregion
 
@@ -79,11 +80,14 @@ public class RedPuniController : ControllableMonoBehavior
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE, this, new CoupleState()));
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE_SLIDE, this, new CoupleSlideState()));
 
+        m_PuniTrigger.TriggerEnterAction += OnEnterMoveObjectTrigger;
+
         RequestChangeState(E_STATE.COUPLE);
     }
 
     public override void OnFinalize()
     {
+        m_PuniTrigger.TriggerEnterAction -= OnEnterMoveObjectTrigger;
         m_StateMachine.OnFinalize();
         base.OnFinalize();
     }
@@ -222,6 +226,26 @@ public class RedPuniController : ControllableMonoBehavior
 
     }
 
+    #endregion
+
+    #region Collider & Trigger
+
+    private void OnEnterMoveObjectTrigger(Collider other, Collider self)
+    {
+        IMoveObject moveObj = null;
+        var t = other.transform;
+        while (!t.TryGetComponent<IMoveObject>(out moveObj))
+        {
+            if (t.parent == null)
+            {
+                break;
+            }
+
+            t = t.parent;
+        }
+
+        moveObj?.OnEnterPuni(this);
+    }
     #endregion
 
     private void RequestChangeState(E_STATE state)

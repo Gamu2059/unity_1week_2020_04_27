@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BluePuniController : ControllableMonoBehavior
+public class BluePuniController : ControllableMonoBehavior, IPuni
 {
     #region Define
 
@@ -86,6 +86,8 @@ public class BluePuniController : ControllableMonoBehavior
     public float XMoveSign { get; private set; }
     public float PuniRelativePositionSign { get; private set; }
 
+    public bool IsBluePuni => true;
+
     #endregion
 
     #region Game Cycle
@@ -101,11 +103,14 @@ public class BluePuniController : ControllableMonoBehavior
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE, this, new CoupleState()));
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE_SLIDE, this, new CoupleSlideState()));
 
+        m_PuniTrigger.TriggerEnterAction += OnEnterMoveObjectTrigger;
+
         RequestChangeState(E_STATE.COUPLE);
     }
 
     public override void OnFinalize()
     {
+        m_PuniTrigger.TriggerEnterAction -= OnEnterMoveObjectTrigger;
         m_StateMachine.OnFinalize();
         base.OnFinalize();
     }
@@ -369,6 +374,8 @@ public class BluePuniController : ControllableMonoBehavior
         m_State = state;
     }
 
+    #region Collider & Trigger
+
     private void SetEnablePuniTrigger(bool isEnable)
     {
         if (isEnable)
@@ -376,17 +383,17 @@ public class BluePuniController : ControllableMonoBehavior
             // 重複登録を避けるため、一度削除する
             if (m_PuniTrigger.TriggerEnterAction != null && m_PuniTrigger.TriggerEnterAction.GetInvocationList().Length > 0)
             {
-                m_PuniTrigger.TriggerEnterAction -= OnTriggerEnterAction;
+                m_PuniTrigger.TriggerEnterAction -= OnEnterPuniTrigger;
             }
-            m_PuniTrigger.TriggerEnterAction += OnTriggerEnterAction;
+            m_PuniTrigger.TriggerEnterAction += OnEnterPuniTrigger;
         }
         else
         {
-            m_PuniTrigger.TriggerEnterAction -= OnTriggerEnterAction;
+            m_PuniTrigger.TriggerEnterAction -= OnEnterPuniTrigger;
         }
     }
 
-    private void OnTriggerEnterAction(Collider other, Collider self)
+    private void OnEnterPuniTrigger(Collider other, Collider self)
     {
         // お互いに触れたら
         if (other.tag == TagName.Puni)
@@ -395,6 +402,25 @@ public class BluePuniController : ControllableMonoBehavior
             m_RedPuni.Couple();
         }
     }
+
+    private void OnEnterMoveObjectTrigger(Collider other, Collider self)
+    {
+        IMoveObject moveObj = null;
+        var t = other.transform;
+        while (!t.TryGetComponent<IMoveObject>(out moveObj))
+        {
+            if (t.parent == null)
+            {
+                break;
+            }
+
+            t = t.parent;
+        }
+
+        moveObj?.OnEnterPuni(this);
+    }
+
+    #endregion
 
     /// <summary>
     /// 赤プニを呼び寄せる
