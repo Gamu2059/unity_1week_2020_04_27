@@ -1498,6 +1498,7 @@ MonoBehaviour:
   m_CoupleSpeed: 4
   m_CoupleSlideSpeed: 3
   m_State: 0
+  m_IsForwardAtract: 1
 --- !u!54 &1812836919
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -74,6 +74,9 @@ public class BluePuniController : ControllableMonoBehavior
     [SerializeField]
     private E_STATE m_State;
 
+    [SerializeField]
+    private bool m_IsForwardAtract;
+
     #endregion
 
     #region Field
@@ -130,6 +133,15 @@ public class BluePuniController : ControllableMonoBehavior
 
     private class AloneState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+            if (Target.m_IsForwardAtract)
+            {
+                Target.SetEnablePuniTrigger(true);
+            }
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -155,6 +167,15 @@ public class BluePuniController : ControllableMonoBehavior
             }
 
             Target.transform.position = pos;
+        }
+
+        public override void OnEnd()
+        {
+            if (Target.m_IsForwardAtract)
+            {
+                Target.SetEnablePuniTrigger(false);
+            }
+            base.OnEnd();
         }
     }
 
@@ -270,7 +291,7 @@ public class BluePuniController : ControllableMonoBehavior
         public override void OnStart()
         {
             base.OnStart();
-            Target.m_PuniTrigger.TriggerEnterAction += OnTriggerEnter;
+            Target.SetEnablePuniTrigger(true);
         }
 
         public override void OnUpdate()
@@ -294,18 +315,8 @@ public class BluePuniController : ControllableMonoBehavior
 
         public override void OnEnd()
         {
-            Target.m_PuniTrigger.TriggerEnterAction -= OnTriggerEnter;
+            Target.SetEnablePuniTrigger(false);
             base.OnEnd();
-        }
-
-        private void OnTriggerEnter(Collider other, Collider self)
-        {
-            // お互いに触れたら
-            if (other.tag == TagName.Puni)
-            {
-                Target.RequestChangeState(E_STATE.COUPLE);
-                Target.m_RedPuni.Couple();
-            }
         }
     }
 
@@ -315,6 +326,12 @@ public class BluePuniController : ControllableMonoBehavior
 
     private class AloneLeaveState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.SetEnablePuniTrigger(true);
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -336,6 +353,12 @@ public class BluePuniController : ControllableMonoBehavior
             Target.RequestChangeState(E_STATE.ALONE);
             Target.m_RedPuni.Alone();
         }
+
+        public override void OnEnd()
+        {
+            Target.SetEnablePuniTrigger(false);
+            base.OnEnd();
+        }
     }
 
     #endregion
@@ -344,6 +367,33 @@ public class BluePuniController : ControllableMonoBehavior
     {
         m_StateMachine?.Goto(state);
         m_State = state;
+    }
+
+    private void SetEnablePuniTrigger(bool isEnable)
+    {
+        if (isEnable)
+        {
+            // 重複登録を避けるため、一度削除する
+            if (m_PuniTrigger.TriggerEnterAction != null && m_PuniTrigger.TriggerEnterAction.GetInvocationList().Length > 0)
+            {
+                m_PuniTrigger.TriggerEnterAction -= OnTriggerEnterAction;
+            }
+            m_PuniTrigger.TriggerEnterAction += OnTriggerEnterAction;
+        }
+        else
+        {
+            m_PuniTrigger.TriggerEnterAction -= OnTriggerEnterAction;
+        }
+    }
+
+    private void OnTriggerEnterAction(Collider other, Collider self)
+    {
+        // お互いに触れたら
+        if (other.tag == TagName.Puni)
+        {
+            RequestChangeState(E_STATE.COUPLE);
+            m_RedPuni.Couple();
+        }
     }
 
     /// <summary>
@@ -368,6 +418,6 @@ public class BluePuniController : ControllableMonoBehavior
     public void SlideCouple()
     {
         RequestChangeState(E_STATE.COUPLE_SLIDE);
-        
+
     }
 }
