@@ -36,15 +36,20 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     #region Field Inspector
 
+    [Header("Component")]
+
+    [SerializeField]
+    private PuniViewController m_ViewController;
+
+    [SerializeField]
+    private BluePuniController m_BluePuni;
+    
     [Header("Collision")]
 
     [SerializeField]
     private ColliderDetector m_PuniTrigger;
 
     [Header("Parameter")]
-
-    [SerializeField]
-    private BluePuniController m_BluePuni;
 
     [SerializeField]
     private float m_AloneSpeed;
@@ -82,6 +87,10 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
         m_PuniTrigger.TriggerEnterAction += OnEnterMoveObjectTrigger;
 
+        m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+        m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD);
+        m_ViewController.SetView(0);
+
         RequestChangeState(E_STATE.COUPLE);
     }
 
@@ -115,7 +124,11 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     private class AloneState : StateCycle
     {
-
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+        }
     }
 
     #endregion
@@ -139,6 +152,8 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
             // 青プニとは逆方向に動くため
             m_MoveDir = -bluePuni.XMoveSign;
+
+            Target.SetLookDirFromXMoveSign(m_MoveDir);
         }
 
         public override void OnUpdate()
@@ -164,6 +179,12 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     private class CoupleState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -214,6 +235,8 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
             }
 
             Target.transform.position = pos;
+
+            Target.SetLookDirFromXMoveSign(delta);
         }
     }
 
@@ -223,7 +246,11 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     private class AloneLeftOutState : StateCycle
     {
-
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.Alone();
+        }
     }
 
     #endregion
@@ -246,6 +273,26 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
         moveObj?.OnEnterPuni(this);
     }
+    #endregion
+
+    #region View
+
+    private void SetLookDirFromXMoveSign(float xMoveSign)
+    {
+        if (xMoveSign == 0)
+        {
+            m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+        }
+        else if (xMoveSign > 0)
+        {
+            m_ViewController.SetLook(E_PUNI_LOOK_DIR.RIGHT, true);
+        }
+        else
+        {
+            m_ViewController.SetLook(E_PUNI_LOOK_DIR.LEFT, true);
+        }
+    }
+
     #endregion
 
     private void RequestChangeState(E_STATE state)

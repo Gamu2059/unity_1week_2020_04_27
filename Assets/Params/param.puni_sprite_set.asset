@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6337d7ab73f79c4188db31397540db9, type: 3}
+  m_Name: param.puni_sprite_set
+  m_EditorClassIdentifier: 
+  m_SpriteSets:
+  - m_Body1: {fileID: 21300000, guid: 329c292828a01bf47a3d9faf69c2657e, type: 3}
+    m_Body2: {fileID: 21300000, guid: 1753d7581f010e9469f6466279e384f7, type: 3}
+    m_Cheek: {fileID: 21300000, guid: e2bf3fa5d40671145a972ec1cab52c6e, type: 3}
+    m_CheekRight: {fileID: 21300000, guid: 85aebab4e7b0ebe4c9c506a33407fd05, type: 3}
+    m_HighLight: {fileID: 21300000, guid: e04f148470a1130439de0748460e7fdd, type: 3}
+    m_HighLightRight: {fileID: 21300000, guid: e04f148470a1130439de0748460e7fdd, type: 3}
+    m_Ribbon: {fileID: 21300000, guid: bb29cfb12e28bef439ac710c3b90c80f, type: 3}
+    m_RibbonRight: {fileID: 21300000, guid: 896b607fda420fe44a99ff1b98bccbc3, type: 3}
+    m_EmoteSets:
+    - m_EmoteType: 0
+      m_Eye: {fileID: 21300000, guid: 5984b27ad8aa43a4b95f44942a7764e8, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: aadcbe32bec551443921c5a8742afb49, type: 3}
+    - m_EmoteType: 1
+      m_Eye: {fileID: 21300000, guid: 89f4752cfc07d344a8806a6774bbfe15, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 575ca51380bebd64da9d8f98e237cc8c, type: 3}
+    - m_EmoteType: 2
+      m_Eye: {fileID: 21300000, guid: 50df148d88b8a1d4eb0b0df77a210636, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 25032740ab12e7b478ee4be3977e1e7f, type: 3}
+  - m_Body1: {fileID: 21300000, guid: 73e204ff07487b9449d926029ddba32c, type: 3}
+    m_Body2: {fileID: 21300000, guid: 9b44ea7a13913564f9cc4f27ad4e9a68, type: 3}
+    m_Cheek: {fileID: 21300000, guid: 711f106013265364d8b6475fc5356cf8, type: 3}
+    m_CheekRight: {fileID: 21300000, guid: d2e0ca0c4a7c0644c97880b7fda1db55, type: 3}
+    m_HighLight: {fileID: 21300000, guid: 8d34f60cfdd8b2649b40abed3be63cb8, type: 3}
+    m_HighLightRight: {fileID: 21300000, guid: 8d34f60cfdd8b2649b40abed3be63cb8, type: 3}
+    m_Ribbon: {fileID: 21300000, guid: 4c3e5f52557e01d409a32651727ba2c7, type: 3}
+    m_RibbonRight: {fileID: 21300000, guid: 71269ae1a20979146833bde4216814b3, type: 3}
+    m_EmoteSets:
+    - m_EmoteType: 0
+      m_Eye: {fileID: 21300000, guid: 998f26d599adba4458a022364023a52d, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 1ee915d576f59bb459c85c1356435f6e, type: 3}
+    - m_EmoteType: 1
+      m_Eye: {fileID: 21300000, guid: 534358fea6bc3c3438cca5c30704356d, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 45ab81875c4d52f4eab9cd4bf3c9a1f1, type: 3}
+    - m_EmoteType: 2
+      m_Eye: {fileID: 21300000, guid: a86f2e94ab5e9a84da0baf954cf240b2, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: e9dd566083a02994ea373b56e65308d3, type: 3}
+  - m_Body1: {fileID: 21300000, guid: 1da70c0d7e9e99a4997345bcf5ab2d81, type: 3}
+    m_Body2: {fileID: 21300000, guid: 759741ff430cafa46a95de764d9b478c, type: 3}
+    m_Cheek: {fileID: 21300000, guid: 772f4d3e0215dcd409f6805504e4346f, type: 3}
+    m_CheekRight: {fileID: 21300000, guid: 8c4d6d2f982aec844b993a3032bcfb89, type: 3}
+    m_HighLight: {fileID: 21300000, guid: 9a1590e4bc47528449e344861c3ccd7e, type: 3}
+    m_HighLightRight: {fileID: 21300000, guid: 9a1590e4bc47528449e344861c3ccd7e, type: 3}
+    m_Ribbon: {fileID: 21300000, guid: 5b03682a2854d5544a07df4b8b84a6a5, type: 3}
+    m_RibbonRight: {fileID: 21300000, guid: 231e0c062a80bed46b7e86e7ddfc2bc7, type: 3}
+    m_EmoteSets:
+    - m_EmoteType: 0
+      m_Eye: {fileID: 21300000, guid: cff4042ede008a94b9e09b8d4661dd0f, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 400238789a09f5446b9162dde1eb2b9f, type: 3}
+    - m_EmoteType: 1
+      m_Eye: {fileID: 21300000, guid: 5341234849487b640804b78b5d05d9d6, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 201ae4b41fd3d2742ad0fe1c3873c044, type: 3}
+    - m_EmoteType: 2
+      m_Eye: {fileID: 21300000, guid: cff4042ede008a94b9e09b8d4661dd0f, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 400238789a09f5446b9162dde1eb2b9f, type: 3}
+  - m_Body1: {fileID: 21300000, guid: 12758dd6a6bc6d64b853a8cf851b522f, type: 3}
+    m_Body2: {fileID: 21300000, guid: 0bf35a0ee785f0d4cb6a1ab6cbafef04, type: 3}
+    m_Cheek: {fileID: 21300000, guid: bdd72fd846481354c8581ac1b731b328, type: 3}
+    m_CheekRight: {fileID: 21300000, guid: e6a6e4129d00db3459ad782511b0416d, type: 3}
+    m_HighLight: {fileID: 21300000, guid: 8f8212ed549fa9f449bfef0ab711ed26, type: 3}
+    m_HighLightRight: {fileID: 21300000, guid: 8f8212ed549fa9f449bfef0ab711ed26, type: 3}
+    m_Ribbon: {fileID: 21300000, guid: a353f4ac29b5d1e4a9a9792021354425, type: 3}
+    m_RibbonRight: {fileID: 21300000, guid: 533fefa8aea06ee4b9f76724a1fffc7a, type: 3}
+    m_EmoteSets:
+    - m_EmoteType: 0
+      m_Eye: {fileID: 21300000, guid: bdea08ce5d1a33245ab98b81cd4cf81f, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 86556a0aa74023b48b106415ae057e31, type: 3}
+    - m_EmoteType: 1
+      m_Eye: {fileID: 21300000, guid: 3fd581cd7f198444f9c8120255ddb890, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 5fe58724f6d40c7449b014c0e96eaf9e, type: 3}
+    - m_EmoteType: 2
+      m_Eye: {fileID: 21300000, guid: bdea08ce5d1a33245ab98b81cd4cf81f, type: 3}
+      m_EyeRight: {fileID: 21300000, guid: 86556a0aa74023b48b106415ae057e31, type: 3}
