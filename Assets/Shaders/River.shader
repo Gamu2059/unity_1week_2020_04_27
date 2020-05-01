@@ -1,4 +1,4 @@
-﻿Shader "Custom/Ground"
+﻿Shader "Custom/River"
 {
     Properties
     {
@@ -11,11 +11,6 @@
         //Y方向のシフトとスピードに関するパラメータを追加
         _YShift("Yuv Shift", Range(-1.0, 1.0)) = 0.1
         _YSpeed("Y Scroll Speed", Range(1.0, 100.0)) = 10.0
-
-        //ちらつく部分を疑似フォグで補正する
-        _FogColor("Fog Color", Color) = (1,1,1,1)
-        _FogBeginY("Fog Begin Y", float) = 0.0
-        _FogEndY("Fog End Y", float) = 1.0
 
         _Alpha("Alpha", Range(0., 1.)) = 1.0
     }
@@ -62,10 +57,6 @@
             float _XSpeed;
             float _YSpeed;
 
-            float4 _FogColor;
-            float _FogBeginY;
-            float _FogEndY;
-
             float _Alpha;
 
             //バーテクスシェーダー（変更なし）
@@ -90,13 +81,8 @@
                 i.uv.x = i.uv.x + _XShift * _Time;
                 i.uv.y = i.uv.y + _YShift * _Time;
 
-                float fogRate = smoothstep(_FogBeginY, _FogEndY, y);
-                // float fogRate = step(_FogBeginY, i.uv.y);
-
                 //i.uvの適用
                 fixed4 col = tex2D(_MainTex, i.uv);
-                col.rgb = col.rgb * (1 - fogRate) + _FogColor.rgb * fogRate;
-
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 col.a = _Alpha;
                 return col;
