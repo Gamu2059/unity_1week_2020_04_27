@@ -932,6 +932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 954286399}
   - component: {fileID: 954286400}
+  - component: {fileID: 954286401}
   m_Layer: 10
   m_Name: Hearts
   m_TagString: Untagged
@@ -966,6 +967,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeartPrefab: {fileID: 6492360050352965598, guid: 7b4c1989ab26bf748b51eea251cda4c5,
+    type: 3}
+  m_XRange: {x: -7.5, y: 7.5}
+  m_InitZPos: 60
+  m_HeartMoveSpeedRange: {x: -5, y: -15}
+  m_NextGenerateTimeRange: {x: 3, y: 6}
+--- !u!114 &954286401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954286398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad7a7466dac72254289d05f1a009969d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HeartPrefab: {fileID: 6492360050352965598, guid: ce33ab9ee72b8d24e9949b26ebb62cfc,
     type: 3}
   m_XRange: {x: -7.5, y: 7.5}
   m_InitZPos: 60
@@ -1567,6 +1586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1746613947}
   - component: {fileID: 1746613946}
+  - component: {fileID: 1746613945}
   m_Layer: 0
   m_Name: GroundCamera
   m_TagString: MainCamera
@@ -1574,6 +1594,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &1746613945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1746613944}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc7570ab378eab4da81bd6b4b9abb84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resolutionWeight: 1
 --- !u!20 &1746613946
 Camera:
   m_ObjectHideFlags: 0
@@ -1583,7 +1616,7 @@ Camera:
   m_GameObject: {fileID: 1746613944}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 1
@@ -1607,7 +1640,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 256
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 6406c8a825274bc4d88292031c782d3f, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1

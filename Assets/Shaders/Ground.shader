@@ -1,4 +1,4 @@
-﻿Shader "Unlit/UVScroll"
+﻿Shader "Custom/Ground"
 {
     Properties
     {
