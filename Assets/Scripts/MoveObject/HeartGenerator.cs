@@ -49,7 +49,7 @@ public class HeartGenerator : MonoBehaviour
         m_NextGenerateTimeCount += Time.deltaTime;
     }
 
-    private HeartController GetCloudFromPool()
+    private HeartController GetHeartFromPool()
     {
         HeartController heart = null;
         if (m_HeartPool == null)
@@ -83,7 +83,7 @@ public class HeartGenerator : MonoBehaviour
 
     private void Generate()
     {
-        var heart = GetCloudFromPool();
+        var heart = GetHeartFromPool();
         if (heart == null)
         {
             return;
