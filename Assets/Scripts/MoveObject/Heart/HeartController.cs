@@ -37,7 +37,7 @@ public class HeartController : MonoBehaviour, IMoveObject
     {
         if (InGameManager.Instance != null)
         {
-            InGameManager.Instance.Closeness.Value += m_ClosenessValue;
+            InGameManager.Instance.GainHeart(m_ClosenessValue);
         }
 
         gameObject.SetActive(false);

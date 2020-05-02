@@ -86,7 +86,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
 
     public void GainHeart(int point)
     {
-        var gain = point * (int)Mathf.Log(2, m_Combo.Value + 2);
+        var gain = point * (int)Mathf.Log(m_Combo.Value + 2, 2);
         m_Closeness.Value += gain;
         m_Combo.Value++;
     }
@@ -107,7 +107,10 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
     /// </summary>
     private void UpdatePlayerSkill()
     {
-        m_PlayerSkill.Value = (int)Mathf.Log10(m_Closeness.Value + 1) + (int)Mathf.Log(2, m_Combo.Value + 1);
+        var closeness = (int) Mathf.Max(0, Mathf.Log10(m_Closeness.Value + 1));
+        var combo = (int)Mathf.Max(0, Mathf.Log(m_Combo.Value + 1, 2));
+        Debug.LogFormat("{0} {1}", closeness, combo);
+        m_PlayerSkill.Value = closeness + combo;
     }
 
     private void CheckGameOver()
