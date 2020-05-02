@@ -7,6 +7,8 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 {
     #region Define
 
+    private const string WALK = "Puni@walk";
+
     private enum E_STATE
     {
         // 1人でいる
@@ -40,6 +42,9 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     [SerializeField]
     private PuniViewController m_ViewController;
+
+    [SerializeField]
+    private Animator m_Animator;
 
     [SerializeField]
     private BluePuniController m_BluePuni;
@@ -128,6 +133,7 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
         {
             base.OnStart();
             Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+            Target.Walk();
         }
     }
 
@@ -154,6 +160,7 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
             m_MoveDir = -bluePuni.XMoveSign;
 
             Target.SetLookDirFromXMoveSign(m_MoveDir);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -183,6 +190,7 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
         {
             base.OnStart();
             Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -215,6 +223,12 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     private class AloneCalledState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.Walk();
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -250,6 +264,7 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
         {
             base.OnStart();
             Target.Alone();
+            Target.Walk();
         }
     }
 
@@ -298,6 +313,10 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
     private void RequestChangeState(E_STATE state)
     {
         m_StateMachine?.Goto(state);
+    }
+    private void Walk()
+    {
+        m_Animator.Play(WALK);
     }
 
     public void Alone()

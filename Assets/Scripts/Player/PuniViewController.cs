@@ -48,6 +48,9 @@ public class PuniViewController : MonoBehaviour
     [Header("Init Option")]
 
     [SerializeField]
+    private bool m_IsUseInitOption = true;
+
+    [SerializeField]
     private bool m_IsLookHighRight = true;
 
     [SerializeField]
@@ -76,14 +79,17 @@ public class PuniViewController : MonoBehaviour
 
     private void Start()
     {
+        if (!m_IsUseInitOption)
+        {
+            return;
+        }
+
         SetEnableRenderer(E_PUNI_PARTS.HIGH_LIGHT, m_IsLookHighRight);
         SetEnableRenderer(E_PUNI_PARTS.RIBBON, m_IsLookRibbon);
 
-        var body1 = GetRenderer(E_PUNI_PARTS.BODY_1);
-        var body2 = GetRenderer(E_PUNI_PARTS.BODY_2);
-        body1.color = m_InitBody1Color;
-        body2.color = m_InitBody2Color;
-        m_ShadowRenderer.color = m_InitShadowColor;
+        SetPartsColor(E_PUNI_PARTS.BODY_1, m_InitBody1Color);
+        SetPartsColor(E_PUNI_PARTS.BODY_2, m_InitBody2Color);
+        SetShadowColor(m_InitShadowColor);
     }
 
     #endregion
@@ -100,6 +106,23 @@ public class PuniViewController : MonoBehaviour
         if (renderer != null)
         {
             renderer.enabled = isEnable;
+        }
+    }
+
+    public void SetPartsColor(E_PUNI_PARTS target, Color color)
+    {
+        var renderer = GetRenderer(target);
+        if (renderer != null)
+        {
+            renderer.color = color;
+        }
+    }
+
+    public void SetShadowColor(Color color)
+    {
+        if (m_ShadowRenderer != null)
+        {
+            m_ShadowRenderer.color = color;
         }
     }
 

@@ -109,4 +109,16 @@ public class ColliderDetector : MonoBehaviour
     {
         TriggerExit2DAction?.Invoke(collision, m_Collider2D);
     }
+
+    public void SetEnableCollider(bool isEnable)
+    {
+        if (m_Collider != null)
+        {
+            m_Collider.enabled = isEnable;
+        }
+        if (m_Collider2D != null)
+        {
+            m_Collider2D.enabled = isEnable;
+        }
+    }
 }

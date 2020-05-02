@@ -802,6 +802,12 @@ MonoBehaviour:
     value: 0
   m_Progress:
     value: 0
+  m_Combo:
+    value: 0
+  m_SpecialCombo:
+    value: 0
+  m_PlayerSkill:
+    value: 0
 --- !u!4 &516666686
 Transform:
   m_ObjectHideFlags: 0
@@ -2068,6 +2074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ViewController: {fileID: 993073288}
+  m_Animator: {fileID: 993073290}
   m_BluePuni: {fileID: 1812836916}
   m_PuniTrigger: {fileID: 993073285}
   m_AloneSpeed: 3
@@ -2086,6 +2093,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbd3823c47764f24f86beb06f7569c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &993073290 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 948152153339621005, guid: c0e052b9bb0e1c4479a67e380bb24660,
+    type: 3}
+  m_PrefabInstance: {fileID: 993073283}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1011113942
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,6 +2661,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1429214657}
+  - component: {fileID: 1429214658}
   m_Layer: 0
   m_Name: Enemies
   m_TagString: Untagged
@@ -2669,6 +2683,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1429214658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429214656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4ac10e682c84ad469d93e6437c08c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parameter: {fileID: 11400000, guid: 96062872c15abd643b90246884028f72, type: 2}
 --- !u!4 &1466145395 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8867630734778705953, guid: a489ccf2539e0f442a3883f484d089ad,
@@ -2836,6 +2863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ViewController: {fileID: 948152153943956666}
+  m_Animator: {fileID: 1812836919}
   m_RedPuni: {fileID: 993073287}
   m_PuniTrigger: {fileID: 1635920}
   m_AloneSpeed: 7.5
@@ -2846,6 +2874,12 @@ MonoBehaviour:
 --- !u!4 &1812836917 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 948152153339621004, guid: c0e052b9bb0e1c4479a67e380bb24660,
+    type: 3}
+  m_PrefabInstance: {fileID: 948152153943956665}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1812836919 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 948152153339621005, guid: c0e052b9bb0e1c4479a67e380bb24660,
     type: 3}
   m_PrefabInstance: {fileID: 948152153943956665}
   m_PrefabAsset: {fileID: 0}
