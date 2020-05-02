@@ -109,7 +109,6 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
     {
         var closeness = (int) Mathf.Max(0, Mathf.Log10(m_Closeness.Value + 1));
         var combo = (int)Mathf.Max(0, Mathf.Log(m_Combo.Value + 1, 2));
-        Debug.LogFormat("{0} {1}", closeness, combo);
         m_PlayerSkill.Value = closeness + combo;
     }
 

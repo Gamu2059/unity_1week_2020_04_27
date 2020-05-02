@@ -9,19 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef812ca558a39449a8dd8e7bd498b00, type: 3}
-  m_Name: param.enemy_puni_generate
+  m_Script: {fileID: 11500000, guid: 9a11f293d43286a409b43f6d0764f104, type: 3}
+  m_Name: param.thorn_generate
   m_EditorClassIdentifier: 
-  m_Prefab: {fileID: 881623293721579713, guid: cbd9026fe9a22cc4981fc9b29eba9f58, type: 3}
+  m_Prefab: {fileID: 2078853531045093347, guid: 4fcdc374715530e43916eb83f6f1396d,
+    type: 3}
   m_UnitParameters:
-  - m_BeginProgress: 0
-    m_EndProgress: 0.25
+  - m_BeginProgress: 0.25
+    m_EndProgress: 0.55
+    m_XRange: {x: -10, y: 10}
     m_NextGenerateTimeWithPS:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 2
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -64,11 +66,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
+    m_XMoveSpeed: {x: 1, y: 6}
     m_Damage: 0
-  m_GeneratedDatas:
-  - m_IsLookRibbon: 0
-    m_Body1Color: {r: 0.94234604, g: 0.9622642, b: 0.26779994, a: 1}
-    m_Body2Color: {r: 0.8267566, g: 0.8396226, b: 0.38416696, a: 0.50980395}
-    m_ShadowColor: {r: 0.9894734, g: 1, b: 0.6273585, a: 0.45490196}
-  m_XRange: {x: -7.3, y: 7.3}
-  m_InitZPos: 60
+  m_GradientSet: {fileID: 11400000, guid: 9d61197debbfb5c48b8d5332a2455260, type: 2}
+  m_ShadowGradientSet: {fileID: 11400000, guid: f1b50d1f9517b4c45b1b8043d1a407f5,
+    type: 2}
+  m_ZRange: {x: 30, y: 60}
+  m_InitYPos: 25
