@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ddd8571855f56469a0f68a5ebcae1c, type: 3}
+  m_Name: grass_side_short.random_get_gradient_set
+  m_EditorClassIdentifier: 
+  m_Set:
+  - m_GradientSet: {fileID: 11400000, guid: 339361519f6d0b7489ebba6e9402718f, type: 2}
+    m_Weight: 4
+  - m_GradientSet: {fileID: 11400000, guid: 34982e3f654c9dc46ba361c2ac0ef4b7, type: 2}
+    m_Weight: 1

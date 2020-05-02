@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 820551f0ea660ca43b17da8ecff1aff2, type: 3}
+  m_Name: grass_side_short1.gradient
+  m_EditorClassIdentifier: 
+  m_Set:
+  - m_Name: _Tex1Color
+    m_Gradient:
+      serializedVersion: 2
+      key0: {r: 0.1194375, g: 0.41509432, b: 0.18821904, a: 1}
+      key1: {r: 0.1194375, g: 0.41509432, b: 0.18821904, a: 1}
+      key2: {r: 0.16976683, g: 0.3301887, b: 0.20776148, a: 0}
+      key3: {r: 0.16976683, g: 0.3301887, b: 0.20776148, a: 0}
+      key4: {r: 0.5, g: 0.46904576, b: 0.20518869, a: 0}
+      key5: {r: 0.5, g: 0.46904576, b: 0.20518869, a: 0}
+      key6: {r: 0.19584373, g: 0.254717, b: 0.20621422, a: 0}
+      key7: {r: 0.19584373, g: 0.254717, b: 0.20621422, a: 0}
+      ctime0: 0
+      ctime1: 19661
+      ctime2: 22937
+      ctime3: 36044
+      ctime4: 39321
+      ctime5: 45875
+      ctime6: 49151
+      ctime7: 65535
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 8
+      m_NumAlphaKeys: 2
+  - m_Name: _Tex2Color
+    m_Gradient:
+      serializedVersion: 2
+      key0: {r: 0.10764508, g: 0.38679248, b: 0.17375895, a: 1}
+      key1: {r: 0.10764508, g: 0.38679248, b: 0.17375895, a: 1}
+      key2: {r: 0.15588287, g: 0.2924528, b: 0.18919261, a: 0}
+      key3: {r: 0.15588287, g: 0.2924528, b: 0.18919261, a: 0}
+      key4: {r: 0.41925442, g: 0.4433962, b: 0.23215556, a: 0}
+      key5: {r: 0.41925442, g: 0.4433962, b: 0.23215556, a: 0}
+      key6: {r: 0.1709238, g: 0.21698111, b: 0.18013526, a: 0}
+      key7: {r: 0.1709238, g: 0.21698111, b: 0.18013526, a: 0}
+      ctime0: 0
+      ctime1: 19661
+      ctime2: 22937
+      ctime3: 36044
+      ctime4: 39321
+      ctime5: 45875
+      ctime6: 49151
+      ctime7: 65535
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 8
+      m_NumAlphaKeys: 2
+  - m_Name: _Tex3Color
+    m_Gradient:
+      serializedVersion: 2
+      key0: {r: 0.10764508, g: 0.38679248, b: 0.17375895, a: 1}
+      key1: {r: 0.10764508, g: 0.38679248, b: 0.17375895, a: 1}
+      key2: {r: 0.15873086, g: 0.2735849, b: 0.18498321, a: 0}
+      key3: {r: 0.15873086, g: 0.2735849, b: 0.18498321, a: 0}
+      key4: {r: 0.356708, g: 0.4245283, b: 0.25832146, a: 0}
+      key5: {r: 0.356708, g: 0.4245283, b: 0.25832146, a: 0}
+      key6: {r: 0.15810788, g: 0.1792453, b: 0.16195105, a: 0}
+      key7: {r: 0.15810788, g: 0.1792453, b: 0.16195105, a: 0}
+      ctime0: 0
+      ctime1: 19661
+      ctime2: 22937
+      ctime3: 36044
+      ctime4: 39321
+      ctime5: 45875
+      ctime6: 49151
+      ctime7: 65535
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 8
+      m_NumAlphaKeys: 2

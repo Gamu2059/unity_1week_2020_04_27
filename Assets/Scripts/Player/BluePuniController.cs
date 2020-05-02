@@ -52,15 +52,20 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     #region Field Inspector
 
+    [Header("Component")]
+
+    [SerializeField]
+    private PuniViewController m_ViewController;
+
+    [SerializeField]
+    private RedPuniController m_RedPuni;
+
     [Header("Collision")]
 
     [SerializeField]
     private ColliderDetector m_PuniTrigger;
 
     [Header("Parameter")]
-
-    [SerializeField]
-    private RedPuniController m_RedPuni;
 
     [SerializeField]
     private float m_AloneSpeed;
@@ -105,6 +110,10 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
         m_PuniTrigger.TriggerEnterAction += OnEnterMoveObjectTrigger;
 
+        m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+        m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD);
+        m_ViewController.SetView(0);
+
         RequestChangeState(E_STATE.COUPLE);
     }
 
@@ -145,6 +154,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             {
                 Target.SetEnablePuniTrigger(true);
             }
+            Target.SetLookDirFromXMoveSign(Target.XMoveSign);
         }
 
         public override void OnUpdate()
@@ -160,6 +170,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             }
 
             var x = Input.GetAxis(HORIZONTAL);
+            var preXMoveSign = Target.XMoveSign;
             Target.XMoveSign = x == 0 ? 0 : Mathf.Sign(x);
 
             var pos = Target.transform.position;
@@ -172,6 +183,11 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             }
 
             Target.transform.position = pos;
+
+            if (preXMoveSign != Target.XMoveSign)
+            {
+                Target.SetLookDirFromXMoveSign(Target.XMoveSign);
+            }
         }
 
         public override void OnEnd()
@@ -206,6 +222,8 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
             m_TargetXPosition = Target.m_RedPuni.transform.position.x;
             m_MoveDir = Target.XMoveSign;
+
+            Target.SetLookDirFromXMoveSign(m_MoveDir);
         }
 
         public override void OnUpdate()
@@ -244,6 +262,12 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     private class CoupleState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -297,6 +321,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         {
             base.OnStart();
             Target.SetEnablePuniTrigger(true);
+            Target.SetLookDirFromXMoveSign(Target.XMoveSign);
         }
 
         public override void OnUpdate()
@@ -304,6 +329,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             base.OnUpdate();
 
             var x = Input.GetAxis(HORIZONTAL);
+            var preXMoveSign = Target.XMoveSign;
             Target.XMoveSign = x == 0 ? 0 : Mathf.Sign(x);
 
             var pos = Target.transform.position;
@@ -316,6 +342,11 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             }
 
             Target.transform.position = pos;
+
+            if (preXMoveSign != Target.XMoveSign)
+            {
+                Target.SetLookDirFromXMoveSign(Target.XMoveSign);
+            }
         }
 
         public override void OnEnd()
@@ -335,6 +366,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         {
             base.OnStart();
             Target.SetEnablePuniTrigger(true);
+            Target.SetLookDirFromXMoveSign(Target.XMoveSign);
         }
 
         public override void OnUpdate()
@@ -342,6 +374,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             base.OnUpdate();
 
             var x = Input.GetAxis(HORIZONTAL);
+            var preXMoveSign = Target.XMoveSign;
             Target.XMoveSign = x == 0 ? 0 : Mathf.Sign(x);
 
             var pos = Target.transform.position;
@@ -357,6 +390,11 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
             Target.RequestChangeState(E_STATE.ALONE);
             Target.m_RedPuni.Alone();
+
+            if (preXMoveSign != Target.XMoveSign)
+            {
+                Target.SetLookDirFromXMoveSign(Target.XMoveSign);
+            }
         }
 
         public override void OnEnd()
@@ -418,6 +456,26 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         }
 
         moveObj?.OnEnterPuni(this);
+    }
+
+    #endregion
+
+    #region View
+
+    private void SetLookDirFromXMoveSign(float xMoveSign)
+    {
+        if (xMoveSign == 0)
+        {
+            m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+        }
+        else if (xMoveSign > 0)
+        {
+            m_ViewController.SetLook(E_PUNI_LOOK_DIR.RIGHT, true);
+        }
+        else
+        {
+            m_ViewController.SetLook(E_PUNI_LOOK_DIR.LEFT, true);
+        }
     }
 
     #endregion

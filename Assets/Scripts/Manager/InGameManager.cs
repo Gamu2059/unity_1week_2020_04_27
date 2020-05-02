@@ -9,6 +9,9 @@ using UniRx;
 /// </summary>
 public class InGameManager : SingletonMonoBehavior<InGameManager>
 {
+    [SerializeField, Tooltip("ゲーム時間")]
+    private float m_InGameDuration;
+
     [SerializeField, Tooltip("親密度")]
     private IntReactiveProperty m_Closeness;
     public IntReactiveProperty Closeness => m_Closeness;
@@ -21,6 +24,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
     {
         base.OnAwake();
 
+        ShaderPropertyID.Create();
+
         m_Closeness = new IntReactiveProperty(100);
         m_Progress = new FloatReactiveProperty(0);
     }
@@ -30,7 +35,14 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
         m_Progress.Dispose();
         m_Closeness.Dispose();
 
+        ShaderPropertyID.Instance?.OnFinalize();
+
         base.OnDestroyed();
+    }
+
+    private void Update()
+    {
+        m_Progress.Value = Mathf.Clamp01(m_Progress.Value + 1f / m_InGameDuration * Time.deltaTime);
     }
 
     private void LateUpdate()

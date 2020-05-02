@@ -29,7 +29,10 @@ public abstract class Singleton<T> where T : class, new()
 
 		if (Instance.Equals(this))
 		{
+			OnFinalizeInternal();
 			Instance = null;
 		}
 	}
+
+	protected virtual void OnFinalizeInternal() { }
 }

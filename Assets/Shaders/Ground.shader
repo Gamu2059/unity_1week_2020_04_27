@@ -16,6 +16,8 @@
         _FogColor("Fog Color", Color) = (1,1,1,1)
         _FogBeginY("Fog Begin Y", float) = 0.0
         _FogEndY("Fog End Y", float) = 1.0
+
+        _Alpha("Alpha", Range(0., 1.)) = 1.0
     }
     SubShader
     {
@@ -64,6 +66,8 @@
             float _FogBeginY;
             float _FogEndY;
 
+            float _Alpha;
+
             //バーテクスシェーダー（変更なし）
             v2f vert (appdata v)
             {
@@ -94,6 +98,7 @@
                 col.rgb = col.rgb * (1 - fogRate) + _FogColor.rgb * fogRate;
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
+                col.a *= _Alpha;
                 return col;
             }
             ENDCG
