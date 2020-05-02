@@ -36,7 +36,7 @@ MonoBehaviour:
       type: 2}
   m_UnitParameters:
   - m_BeginProgress: 0
-    m_EndProgress: 1
+    m_EndProgress: 0.99
     m_Prefab: {fileID: 1896590168751217625, guid: e90a62f667e6aca44a7e68f0be6bf566,
       type: 3}
     m_XRange: {x: -17, y: -9}
@@ -91,7 +91,7 @@ MonoBehaviour:
     m_RandomGetGradientSet: {fileID: 11400000, guid: 88f8fce0682c8374eacb88cb4b3bf5ce,
       type: 2}
   - m_BeginProgress: 0
-    m_EndProgress: 1
+    m_EndProgress: 0.99
     m_Prefab: {fileID: 1896590168751217625, guid: e90a62f667e6aca44a7e68f0be6bf566,
       type: 3}
     m_XRange: {x: 9, y: 17}
@@ -146,7 +146,7 @@ MonoBehaviour:
     m_RandomGetGradientSet: {fileID: 11400000, guid: 88f8fce0682c8374eacb88cb4b3bf5ce,
       type: 2}
   - m_BeginProgress: 0
-    m_EndProgress: 1
+    m_EndProgress: 0.99
     m_Prefab: {fileID: 1896590168751217625, guid: 4a7ea5f5654aaf8448208ed54305725c,
       type: 3}
     m_XRange: {x: -8.5, y: 8.5}

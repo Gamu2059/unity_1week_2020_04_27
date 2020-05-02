@@ -98,7 +98,7 @@
                 col.rgb = col.rgb * (1 - fogRate) + _FogColor.rgb * fogRate;
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
-                col.a = _Alpha;
+                col.a *= _Alpha;
                 return col;
             }
             ENDCG

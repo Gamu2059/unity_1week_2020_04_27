@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 山制御クラス
+/// 背景の置物の制御クラス
 /// </summary>
-public class MountainController : MonoBehaviour
+public class BackObjectController : MonoBehaviour
 {
     #region Field Inspector
 
