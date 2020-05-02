@@ -11,6 +11,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
+    private const string WALK = "Puni@walk";
 
     private enum E_STATE
     {
@@ -56,6 +57,9 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     [SerializeField]
     private PuniViewController m_ViewController;
+
+    [SerializeField]
+    private Animator m_Animator;
 
     [SerializeField]
     private RedPuniController m_RedPuni;
@@ -155,6 +159,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
                 Target.SetEnablePuniTrigger(true);
             }
             Target.SetLookDirFromXMoveSign(Target.XMoveSign);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -224,6 +229,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             m_MoveDir = Target.XMoveSign;
 
             Target.SetLookDirFromXMoveSign(m_MoveDir);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -266,6 +272,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         {
             base.OnStart();
             Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD, true);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -322,6 +329,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             base.OnStart();
             Target.SetEnablePuniTrigger(true);
             Target.SetLookDirFromXMoveSign(Target.XMoveSign);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -367,6 +375,7 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
             base.OnStart();
             Target.SetEnablePuniTrigger(true);
             Target.SetLookDirFromXMoveSign(Target.XMoveSign);
+            Target.Walk();
         }
 
         public override void OnUpdate()
@@ -479,6 +488,11 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
     }
 
     #endregion
+
+    private void Walk()
+    {
+        m_Animator.Play(WALK);
+    }
 
     /// <summary>
     /// 赤プニを呼び寄せる
