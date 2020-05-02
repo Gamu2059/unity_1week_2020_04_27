@@ -3,10 +3,13 @@
     Properties
     {
         _Tex1Color ("Texture 1 Color", Color) = (1,1,1,1)
+        _Tex1Alpha ("Texture 1 Alpha", float) = 1
         _Tex1 ("Texture 1", 2D) = "white" {}
         _Tex2Color ("Texture 2 Color", Color) = (1,1,1,1)
+        _Tex2Alpha ("Texture 2 Alpha", float) = 1
         _Tex2 ("Texture 2", 2D) = "white" {}
         _Tex3Color ("Texture 3 Color", Color) = (1,1,1,1)
+        _Tex3Alpha ("Texture 3 Alpha", float) = 1
         _Tex3 ("Texture 3", 2D) = "white" {}
     }
     SubShader
@@ -50,6 +53,7 @@
             sampler2D _Tex1, _Tex2, _Tex3;
             float4 _Tex1_ST;
             float4 _Tex1Color, _Tex2Color, _Tex3Color;
+            float _Tex1Alpha, _Tex2Alpha, _Tex3Alpha;
 
             v2f vert (appdata v)
             {
@@ -65,9 +69,12 @@
                 float4 col1 = tex2D(_Tex1, i.uv) * _Tex1Color;
                 float4 col2 = tex2D(_Tex2, i.uv) * _Tex2Color;
                 float4 col3 = tex2D(_Tex3, i.uv) * _Tex3Color;
+                col1.a = col1.a * _Tex1Alpha;
+                col2.a = col2.a * _Tex2Alpha;
+                col3.a = col3.a * _Tex3Alpha;
 
                 // SrcAlpha OneMinusSrcAlpha みたいなブレンドをする
-                float4 col = col1 * (1 - col2.a) + col2 * col2.a;
+                fixed4 col = col1 * (1 - col2.a) + col2 * col2.a;
                 col = col * (1 - col3.a) + col3 * col3.a;
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

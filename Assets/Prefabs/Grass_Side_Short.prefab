@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b62ff74d6ba6094ca0b0f47fc4ecb36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoveSpeed: -4
+  m_Id: Grass Side Short 001
+  m_Renderers:
+  - {fileID: 2745895311123931025}
+  - {fileID: 812326980018496133}
 --- !u!1 &5303833096544546025
 GameObject:
   m_ObjectHideFlags: 0
