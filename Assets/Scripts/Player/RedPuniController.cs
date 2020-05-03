@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UniRx;
 
 public class RedPuniController : ControllableMonoBehavior, IPuni
 {
     #region Define
 
     private const string WALK = "Puni@walk";
+    private const string DAMAGED = "Puni@damaged";
+    private const string STOP = "Puni@stop";
 
     private enum E_STATE
     {
@@ -24,6 +27,15 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
         // 1人でいるが、離された直後
         ALONE_LEFT_OUT,
+
+        // ダメージ受けた時
+        DAMAGED,
+
+        // ゲームオーバー
+        GAME_OVER,
+
+        // ゲームクリア
+        GAME_CLEAR,
     }
 
     private class StateCycle : StateCycleBase<RedPuniController, E_STATE> { }
@@ -57,9 +69,6 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
     [Header("Parameter")]
 
     [SerializeField]
-    private float m_AloneSpeed;
-
-    [SerializeField]
     private float m_CoupleCalledSpeed;
 
     [SerializeField]
@@ -67,6 +76,24 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     [SerializeField]
     private float m_CoupleDistance;
+
+    [SerializeField]
+    private float m_GameOverRunawaySpeed;
+
+    [SerializeField]
+    private float m_GameClearLeftSidePosX;
+
+    [SerializeField]
+    private float m_GameClearRightSidePosX;
+
+    [SerializeField]
+    private float m_GameClearMoveDuration;
+
+    [SerializeField]
+    private float m_GameClearWaitDuration;
+
+    [SerializeField]
+    private GameObject m_HeartAnimationObject;
 
     #endregion
 
@@ -89,12 +116,17 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
         m_StateMachine.AddState(new InnerState(E_STATE.ALONE_LEFT_OUT, this, new AloneLeftOutState()));
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE, this, new CoupleState()));
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE_SLIDE, this, new CoupleSlideState()));
+        m_StateMachine.AddState(new InnerState(E_STATE.DAMAGED, this, new DamagedState()));
+        m_StateMachine.AddState(new InnerState(E_STATE.GAME_OVER, this, new GameOverState()));
+        m_StateMachine.AddState(new InnerState(E_STATE.GAME_CLEAR, this, new GameClearState()));
 
         m_PuniTrigger.TriggerEnterAction += OnEnterMoveObjectTrigger;
 
         m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
         m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD);
         m_ViewController.SetView(0);
+
+        InGameManager.Instance.ChangeStateAction += OnChangeState;
 
         RequestChangeState(E_STATE.COUPLE);
     }
@@ -270,6 +302,115 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     #endregion
 
+    #region Damaged State
+
+    private class DamagedState : StateCycle
+    {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_PuniTrigger.SetEnableCollider(false);
+            Target.m_Animator.Play(DAMAGED);
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.DAMAGED);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
+            {
+                Target.m_PuniTrigger.SetEnableCollider(true);
+                Target.m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+                Target.RequestChangeState(E_STATE.ALONE);
+                Target.m_BluePuni.Alone();
+            }).AddTo(Target);
+        }
+    }
+
+    #endregion
+
+    #region Game Over State
+
+    private class GameOverState : StateCycle
+    {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_PuniTrigger.SetEnableCollider(false);
+            Target.m_Animator.Play(WALK);
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.ANGRY);
+            Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.BACK);
+            Target.m_ViewController.UpdateView();
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            
+            var pos = Target.transform.position;
+            pos.z += Target.m_GameOverRunawaySpeed * Time.deltaTime;
+
+            if (GroundManager.Instance != null)
+            {
+                pos.y = GroundManager.Instance.GetYPosition(pos.x, pos.z);
+            }
+
+            Target.transform.position = pos;
+        }
+    }
+
+    #endregion
+
+    #region Game Clear State
+
+    private class GameClearState : StateCycle
+    {
+
+        private float m_MoveSpeed;
+        private float m_MoveAfterLookDir;
+        private bool m_IsLoving;
+
+        public override void OnStart()
+        {
+            base.OnStart();
+
+            var targetX = Target.m_BluePuni.PuniRelativePositionSign < 0 ? Target.m_GameClearLeftSidePosX : Target.m_GameClearRightSidePosX;
+            var pos = Target.transform.position;
+            m_MoveSpeed = (targetX - pos.x) / Target.m_GameClearMoveDuration;
+
+            // 青プニにとっての向きなので、赤プニではそのまま使う
+            m_MoveAfterLookDir = -Target.m_BluePuni.PuniRelativePositionSign;
+
+            m_IsLoving = false;
+
+            Observable.Timer(TimeSpan.FromSeconds(Target.m_GameClearMoveDuration)).Subscribe(_ =>
+            {
+                m_IsLoving = true;
+                Target.m_Animator.Play(STOP);
+                Target.SetLookDirFromXMoveSign(m_MoveAfterLookDir);
+
+                Observable.Timer(TimeSpan.FromSeconds(Target.m_GameClearWaitDuration)).Subscribe(__ =>
+                {
+                    Target.m_ViewController.SetEmote(E_PUNI_EMOTE.LOVE, true);
+                    // ハートパーティクルを発火
+                    Target.m_HeartAnimationObject.SetActive(true);
+                }).AddTo(Target);
+            }).AddTo(Target);
+
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+            Target.Walk();
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (!m_IsLoving)
+            {
+                var pos = Target.transform.position;
+                pos.x += m_MoveSpeed * Time.deltaTime;
+                Target.transform.position = pos;
+            }
+        }
+    }
+
+    #endregion
+
     #region Collider & Trigger
 
     private void OnEnterMoveObjectTrigger(Collider other, Collider self)
@@ -288,6 +429,12 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
         moveObj?.OnEnterPuni(this);
     }
+
+    public void KnockBack()
+    {
+        RequestChangeState(E_STATE.DAMAGED);
+    }
+
     #endregion
 
     #region View
@@ -314,6 +461,19 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
     {
         m_StateMachine?.Goto(state);
     }
+
+    private void OnChangeState(E_INGAME_STATE state)
+    {
+        if (state == E_INGAME_STATE.GAME_CLEAR)
+        {
+            RequestChangeState(E_STATE.GAME_CLEAR);
+        }
+        else if (state == E_INGAME_STATE.GAME_OVER)
+        {
+            RequestChangeState(E_STATE.GAME_OVER);
+        }
+    }
+
     private void Walk()
     {
         m_Animator.Play(WALK);

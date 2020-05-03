@@ -68,6 +68,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     public float TimeScale { get; private set; }
 
+    public bool IsInvalidJumpSe;
+
     #endregion
 
     #region Game Cycle
@@ -102,6 +104,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
         UpdatePlayerSkill();
 
         RequestChangeState(E_INGAME_STATE.TITLE);
+
+        IsInvalidJumpSe = false;
     }
 
     protected override void OnDestroyed()

@@ -266,6 +266,7 @@ public class ThornController : MonoBehaviour, IMoveObject
 
         m_IsCollided = true;
         RequestChangeState(E_STATE.STAY);
+        puni.KnockBack();
 
         if (InGameManager.Instance != null)
         {
