@@ -199,4 +199,9 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
             SceneManager.LoadScene("InGame");
         }
     }
+
+    public void SendScoreAndShowRanking()
+    {
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(Closeness.Value);
+    }
 }
