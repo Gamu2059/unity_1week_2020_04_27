@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 820551f0ea660ca43b17da8ecff1aff2, type: 3}
-  m_Name: grass_side_short1.gradient
+  m_Name: grass_side_1.gradient
   m_EditorClassIdentifier: 
   m_Set:
   - m_Name: _Tex1Color

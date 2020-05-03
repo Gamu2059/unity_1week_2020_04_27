@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1896590168751217624}
   - component: {fileID: 1896590168751217625}
   m_Layer: 10
-  m_Name: Grass_Side_Short
+  m_Name: Grass_Side_Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b62ff74d6ba6094ca0b0f47fc4ecb36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Id: Grass Side Short 001
+  m_Id: Grass Side Long 001
   m_Renderers:
   - {fileID: 2745895311123931025}
 --- !u!1 &6504429782341310440
@@ -105,7 +105,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e293ebaa1cc86a24381e7cacfb2c56f0, type: 2}
+  - {fileID: 2100000, guid: b5a5d7d8a89a91342bfc1dc370e4f3e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

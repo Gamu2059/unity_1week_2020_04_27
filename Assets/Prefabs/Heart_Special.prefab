@@ -70,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: -1065594423
   m_SortingLayer: 1
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 0cb3afa3c7a79c843a755b54b978ab3e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e356fe6d8df2e124a92d3a893802f7ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 6492360050352965598}
   - component: {fileID: 1037370790571974296}
   m_Layer: 10
-  m_Name: Heart_Damage
+  m_Name: Heart_Special
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,8 +128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73cace4f10261af4fad81fb6cff8945a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ClosenessValue: -100
-  MoveSpeed: 0
 --- !u!54 &1037370790571974296
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -196,7 +194,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dee9bf58b19262641af4f75989e8ed4c, type: 2}
+  - {fileID: 2100000, guid: 8598cb220fc10414d8ede475ece2f2a6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

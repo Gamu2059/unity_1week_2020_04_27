@@ -59,15 +59,15 @@ public class GrassController : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        if (GroundManager.Instance != null)
-        {
-            var rot = Quaternion.Euler(GroundManager.Instance.GetXAngle(transform.position.z) - 90, 0, 0);
-            transform.SetPositionAndRotation(pos, rot);
-        }
-        else
-        {
+        //if (GroundManager.Instance != null)
+        //{
+        //    var rot = Quaternion.Euler(GroundManager.Instance.GetXAngle(transform.position.z) - 90, 0, 0);
+        //    transform.SetPositionAndRotation(pos, rot);
+        //}
+        //else
+        //{
             transform.position = pos;
-        }
+        //}
 
         ApplyProgress();
     }
