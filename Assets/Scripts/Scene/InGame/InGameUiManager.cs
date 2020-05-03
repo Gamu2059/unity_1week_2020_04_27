@@ -263,6 +263,8 @@ public class InGameUiManager : MonoBehaviour
 
             Observable.Timer(TimeSpan.FromSeconds(Target.m_WaitGameClearPerformanceTime)).Subscribe(_ =>
             {
+                InGameManager.Instance.IsInvalidJumpSe = true;
+
                 Target.StartCreateScreenShot(tex =>
                 {
                     Target.m_RenderImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);

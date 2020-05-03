@@ -146,6 +146,8 @@ MonoBehaviour:
     m_LookForwardOffsetZ: -0.03
     m_LookBackOffsetZ: 0.03
   m_ShadowRenderer: {fileID: 948152153423504293}
+  m_IsEnableJumpSe: 0
+  m_IsUseInitOption: 1
   m_IsLookHighRight: 1
   m_IsLookRibbon: 0
   m_InitBody1Color: {r: 0, g: 0.6612811, b: 1, a: 1}

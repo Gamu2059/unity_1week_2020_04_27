@@ -99,10 +99,19 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
     private float m_CoupleSlideSpeed;
 
     [SerializeField]
-    private E_STATE m_State;
+    private bool m_IsForwardAtract;
 
     [SerializeField]
-    private bool m_IsForwardAtract;
+    private float m_GameClearLeftSidePosX;
+
+    [SerializeField]
+    private float m_GameClearRightSidePosX;
+
+    [SerializeField]
+    private float m_GameClearMoveDuration;
+
+    [SerializeField]
+    private float m_GameClearWaitDuration;
 
     #endregion
 
@@ -111,12 +120,12 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
     private StateMachine<E_STATE, BluePuniController> m_StateMachine;
 
     public float XMoveSign { get; private set; }
+
+    // 赤プニに対して青プニが左右のどちらにいるか
+
     public float PuniRelativePositionSign { get; private set; }
 
     public bool IsBluePuni => true;
-
-    private bool m_IsGameOver;
-    private bool m_IsGameClear;
 
     #endregion
 
@@ -483,7 +492,51 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     private class GameClearState : StateCycle
     {
+        private float m_MoveSpeed;
+        private float m_MoveAfterLookDir;
+        private bool m_IsLoving;
 
+        public override void OnStart()
+        {
+            base.OnStart();
+
+            // 負の時は左、0以上は右
+            var targetX = -Target.PuniRelativePositionSign < 0 ? Target.m_GameClearLeftSidePosX : Target.m_GameClearRightSidePosX;
+            var pos = Target.transform.position;
+            m_MoveSpeed = (targetX - pos.x) / Target.m_GameClearMoveDuration;
+            
+            m_MoveAfterLookDir = Target.PuniRelativePositionSign;
+
+            m_IsLoving = false;
+
+            Observable.Timer(TimeSpan.FromSeconds(Target.m_GameClearMoveDuration)).Subscribe(_ =>
+            {
+                m_IsLoving = true;
+                Target.m_Animator.Play(STOP);
+                Target.SetLookDirFromXMoveSign(m_MoveAfterLookDir);
+
+                Observable.Timer(TimeSpan.FromSeconds(Target.m_GameClearWaitDuration)).Subscribe(__ =>
+                {
+                    Target.m_ViewController.SetEmote(E_PUNI_EMOTE.LOVE);
+                    Target.Walk();
+                }).AddTo(Target);
+            }).AddTo(Target);
+
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+            Target.Walk();
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (!m_IsLoving)
+            {
+                var pos = Target.transform.position;
+                pos.x += m_MoveSpeed * Time.deltaTime;
+                Target.transform.position = pos;
+            }
+        }
     }
 
     #endregion
@@ -491,7 +544,6 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
     private void RequestChangeState(E_STATE state)
     {
         m_StateMachine?.Goto(state);
-        m_State = state;
     }
 
     private void OnChangeState(E_INGAME_STATE state)
@@ -499,12 +551,10 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         if (state == E_INGAME_STATE.GAME_CLEAR)
         {
             RequestChangeState(E_STATE.GAME_CLEAR);
-            m_IsGameClear = true;
         }
         else if (state == E_INGAME_STATE.GAME_OVER)
         {
             RequestChangeState(E_STATE.GAME_OVER);
-            m_IsGameOver = true;
         }
     }
 

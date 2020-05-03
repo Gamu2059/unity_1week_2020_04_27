@@ -177,7 +177,7 @@ public class PuniViewController : MonoBehaviour
 
     public void OnJump()
     {
-        if (m_IsEnableJumpSe)
+        if (m_IsEnableJumpSe && !InGameManager.Instance.IsInvalidJumpSe)
         {
             AudioManager.Instance.PlaySE(AudioManagerKeyWord.Jump);
         }

@@ -371,7 +371,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - m_BeginProgress: 0.64
-    m_EndProgress: 0.95
+    m_EndProgress: 0.87
     m_Prefab: {fileID: 8903386905563070959, guid: 6b2a8acc93555534ca1817783180eb94,
       type: 3}
     m_XRange: {x: -14, y: -14}
@@ -460,7 +460,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - m_BeginProgress: 0.641
-    m_EndProgress: 0.95
+    m_EndProgress: 0.87
     m_Prefab: {fileID: 8903386905563070959, guid: 6b2a8acc93555534ca1817783180eb94,
       type: 3}
     m_XRange: {x: 14, y: 14}
@@ -549,7 +549,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - m_BeginProgress: 0.67
-    m_EndProgress: 0.95
+    m_EndProgress: 0.87
     m_Prefab: {fileID: 3750852679939572769, guid: 6a653c741bd7c3a4bad96f3070a7bde8,
       type: 3}
     m_XRange: {x: -27, y: -27}
@@ -638,7 +638,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - m_BeginProgress: 0.671
-    m_EndProgress: 0.95
+    m_EndProgress: 0.87
     m_Prefab: {fileID: 3750852679939572769, guid: 6a653c741bd7c3a4bad96f3070a7bde8,
       type: 3}
     m_XRange: {x: 27, y: 27}

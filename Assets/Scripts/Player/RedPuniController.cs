@@ -10,6 +10,7 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
 
     private const string WALK = "Puni@walk";
     private const string DAMAGED = "Puni@damaged";
+    private const string STOP = "Puni@stop";
 
     private enum E_STATE
     {
@@ -79,15 +80,27 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
     [SerializeField]
     private float m_GameOverRunawaySpeed;
 
+    [SerializeField]
+    private float m_GameClearLeftSidePosX;
+
+    [SerializeField]
+    private float m_GameClearRightSidePosX;
+
+    [SerializeField]
+    private float m_GameClearMoveDuration;
+
+    [SerializeField]
+    private float m_GameClearWaitDuration;
+
+    [SerializeField]
+    private GameObject m_HeartAnimationObject;
+
     #endregion
 
     #region Field
 
     private StateMachine<E_STATE, RedPuniController> m_StateMachine;
     public bool IsBluePuni => false;
-
-    private bool m_IsGameOver;
-    private bool m_IsGameClear;
 
     #endregion
 
@@ -301,12 +314,6 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
             Target.m_ViewController.SetEmote(E_PUNI_EMOTE.DAMAGED);
             Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
             {
-                // ゲームオーバーまたはゲームクリアの時は処理を無視する
-                if (Target.m_IsGameOver || Target.m_IsGameClear)
-                {
-                    return;
-                }
-
                 Target.m_PuniTrigger.SetEnableCollider(true);
                 Target.m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
                 Target.RequestChangeState(E_STATE.ALONE);
@@ -354,6 +361,52 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
     private class GameClearState : StateCycle
     {
 
+        private float m_MoveSpeed;
+        private float m_MoveAfterLookDir;
+        private bool m_IsLoving;
+
+        public override void OnStart()
+        {
+            base.OnStart();
+
+            var targetX = Target.m_BluePuni.PuniRelativePositionSign < 0 ? Target.m_GameClearLeftSidePosX : Target.m_GameClearRightSidePosX;
+            var pos = Target.transform.position;
+            m_MoveSpeed = (targetX - pos.x) / Target.m_GameClearMoveDuration;
+
+            // 青プニにとっての向きなので、赤プニではそのまま使う
+            m_MoveAfterLookDir = -Target.m_BluePuni.PuniRelativePositionSign;
+
+            m_IsLoving = false;
+
+            Observable.Timer(TimeSpan.FromSeconds(Target.m_GameClearMoveDuration)).Subscribe(_ =>
+            {
+                m_IsLoving = true;
+                Target.m_Animator.Play(STOP);
+                Target.SetLookDirFromXMoveSign(m_MoveAfterLookDir);
+
+                Observable.Timer(TimeSpan.FromSeconds(Target.m_GameClearWaitDuration)).Subscribe(__ =>
+                {
+                    Target.m_ViewController.SetEmote(E_PUNI_EMOTE.LOVE, true);
+                    // ハートパーティクルを発火
+                    Target.m_HeartAnimationObject.SetActive(true);
+                }).AddTo(Target);
+            }).AddTo(Target);
+
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+            Target.Walk();
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (!m_IsLoving)
+            {
+                var pos = Target.transform.position;
+                pos.x += m_MoveSpeed * Time.deltaTime;
+                Target.transform.position = pos;
+            }
+        }
     }
 
     #endregion
@@ -414,12 +467,10 @@ public class RedPuniController : ControllableMonoBehavior, IPuni
         if (state == E_INGAME_STATE.GAME_CLEAR)
         {
             RequestChangeState(E_STATE.GAME_CLEAR);
-            m_IsGameClear = true;
         }
         else if (state == E_INGAME_STATE.GAME_OVER)
         {
             RequestChangeState(E_STATE.GAME_OVER);
-            m_IsGameOver = true;
         }
     }
 
