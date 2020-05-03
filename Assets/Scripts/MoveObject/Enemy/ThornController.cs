@@ -200,9 +200,10 @@ public class ThornController : MonoBehaviour, IMoveObject
                 return;
             }
 
+            var ts = InGameManager.Instance.TimeScale;
             var move = Target.m_XMoveDecreaseCurve.Evaluate(m_TimeCount) * Target.m_XMoveSpeed;
             pos.x += m_MoveDir * move * Time.deltaTime;
-            pos.z += Target.m_MoveSpeed * Time.deltaTime;
+            pos.z += Target.m_MoveSpeed * Time.deltaTime * ts;
 
             if (GroundManager.Instance != null)
             {

@@ -67,7 +67,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 0
     m_XMoveSpeed: {x: 1, y: 6}
-    m_Damage: 0
+    m_Damage: 1000
   m_GradientSet: {fileID: 11400000, guid: 9d61197debbfb5c48b8d5332a2455260, type: 2}
   m_ShadowGradientSet: {fileID: 11400000, guid: f1b50d1f9517b4c45b1b8043d1a407f5,
     type: 2}

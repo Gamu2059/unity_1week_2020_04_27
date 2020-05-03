@@ -57,6 +57,7 @@ public class HeartGenerator : MonoBehaviour
     private List<GenerateActSpecialData> m_GenerateActSpecialDatas;
     private List<HeartController> m_HeartPool;
     private List<HeartController> m_SpecialHeartPool;
+    private bool m_IsValid;
 
     #endregion
 
@@ -93,11 +94,13 @@ public class HeartGenerator : MonoBehaviour
             data.SpecialId = i;
             m_GenerateActSpecialDatas.Add(data);
         }
+
+        InGameManager.Instance.ChangeStateAction += OnChangeState;
     }
 
     private void Update()
     {
-        if (InGameManager.Instance == null)
+        if (InGameManager.Instance == null || !m_IsValid)
         {
             return;
         }
@@ -207,5 +210,10 @@ public class HeartGenerator : MonoBehaviour
 
         var moveSpeed = m_Parameter.GetMoveSpeed(playerSkill); ;
         heart.OnGeneratedAsSpecialHeart(moveSpeed, m_Parameter.SpecialHeartPoint, data.SpecialId, data.Data.XPositions.Length);
+    }
+
+    private void OnChangeState(E_INGAME_STATE state)
+    {
+        m_IsValid = state == E_INGAME_STATE.GAME;
     }
 }

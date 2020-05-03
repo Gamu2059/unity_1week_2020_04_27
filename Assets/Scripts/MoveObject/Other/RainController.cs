@@ -45,6 +45,7 @@ public class RainController : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance.PlayBGM(AudioManagerKeyWord.Rain);
         ApplyProgress();
     }
 
@@ -76,6 +77,8 @@ public class RainController : MonoBehaviour
                 m_MaterialPropBlocks[i].SetFloat(ShaderPropertyID.Instance.GetID(m_AlphaPropName), alpha);
                 m_Renderers[i].SetPropertyBlock(m_MaterialPropBlocks[i]);
             }
+
+            AudioManager.Instance.ChangeVolumeBGM(AudioManagerKeyWord.Rain, alpha);
         }
     }
 }
