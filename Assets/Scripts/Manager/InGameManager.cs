@@ -91,7 +91,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
         m_Combo.Value++;
     }
 
-    public void GainSpecialHeart(int id)
+    public void GainSpecialHeart(int id, int maxCombo)
     {
 
     }

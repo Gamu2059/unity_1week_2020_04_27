@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2edd2ea53ca2cf643b554bee474d5d8d, type: 3}
+  m_Name: param.heart_generate
+  m_EditorClassIdentifier: 
+  m_HeartPrefab: {fileID: 6492360050352965598, guid: 7b4c1989ab26bf748b51eea251cda4c5,
+    type: 3}
+  m_SpecialHeartPrefab: {fileID: 6492360050352965598, guid: d7e4f5a289693a841a67ee9c932613c9,
+    type: 3}
+  m_HeartPoint: 1
+  m_SpecialHeartPoint: 3
+  m_UnitParameter:
+    m_XRange: {x: -7.3, y: 7.3}
+    m_NextGenerateTimeWithPS:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.5
+        inSlope: -0.0039741364
+        outSlope: -0.0039741364
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.04154589
+      - serializedVersion: 3
+        time: 100
+        value: 0.3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_SpecialUnitParameters:
+  - m_FireTimingProgress: 0.1
+    m_XPositions:
+    - -3
+    - -1.5
+    - 0
+    - 1.5
+    - 3
+    m_GenerateInterval: 0.3
+  m_InitZPos: 60
+  m_MoveSpeedWithPS:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -8
+      inSlope: -0.07389037
+      outSlope: -0.07389037
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.11594202
+    - serializedVersion: 3
+      time: 100
+      value: -30
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
