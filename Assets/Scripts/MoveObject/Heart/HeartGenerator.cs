@@ -93,6 +93,8 @@ public class HeartGenerator : MonoBehaviour
             data.SpecialId = i;
             m_GenerateActSpecialDatas.Add(data);
         }
+
+        InGameManager.Instance.ChangeStateAction += OnChangeState;
     }
 
     private void Update()
@@ -207,5 +209,21 @@ public class HeartGenerator : MonoBehaviour
 
         var moveSpeed = m_Parameter.GetMoveSpeed(playerSkill); ;
         heart.OnGeneratedAsSpecialHeart(moveSpeed, m_Parameter.SpecialHeartPoint, data.SpecialId, data.Data.XPositions.Length);
+    }
+
+    private void OnChangeState(E_INGAME_STATE state)
+    {
+        if (state == E_INGAME_STATE.GAME_OVER || state == E_INGAME_STATE.GAME_CLEAR)
+        {
+            foreach (var h in m_HeartPool)
+            {
+                Destroy(h);
+            }
+
+            foreach (var h in m_SpecialHeartPool)
+            {
+                Destroy(h);
+            }
+        }
     }
 }

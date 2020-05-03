@@ -1373,7 +1373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UnityRoomId: puni_dating
   m_Camera: {fileID: 1362301383}
-  m_InGameDuration: 100
+  m_InGameDuration: 10
   m_Closeness:
     value: 0
   m_Progress:
