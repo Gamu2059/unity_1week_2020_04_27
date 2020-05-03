@@ -134,8 +134,9 @@ public class EnemyPuniController : MonoBehaviour, IMoveObject
         {
             base.OnUpdate();
 
+            var ts = InGameManager.Instance.TimeScale;
             var pos = Target.transform.position;
-            pos.z += Target.m_MoveSpeed * Time.deltaTime;
+            pos.z += Target.m_MoveSpeed * Time.deltaTime * (ts > 0 ? ts : 0.5f);
 
             if (pos.z < 0)
             {
@@ -191,8 +192,9 @@ public class EnemyPuniController : MonoBehaviour, IMoveObject
             }
             else
             {
+                var ts = InGameManager.Instance.TimeScale;
                 var pos = Target.transform.position;
-                pos.z += -Target.m_DamagedMoveSpeed * Time.deltaTime;
+                pos.z += -Target.m_DamagedMoveSpeed * Time.deltaTime * ts;
 
                 if (GroundManager.Instance != null)
                 {

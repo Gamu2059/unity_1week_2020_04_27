@@ -57,6 +57,7 @@ public class HeartGenerator : MonoBehaviour
     private List<GenerateActSpecialData> m_GenerateActSpecialDatas;
     private List<HeartController> m_HeartPool;
     private List<HeartController> m_SpecialHeartPool;
+    private bool m_IsValid;
 
     #endregion
 
@@ -99,7 +100,7 @@ public class HeartGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (InGameManager.Instance == null)
+        if (InGameManager.Instance == null || !m_IsValid)
         {
             return;
         }
@@ -213,17 +214,6 @@ public class HeartGenerator : MonoBehaviour
 
     private void OnChangeState(E_INGAME_STATE state)
     {
-        if (state == E_INGAME_STATE.GAME_OVER || state == E_INGAME_STATE.GAME_CLEAR)
-        {
-            foreach (var h in m_HeartPool)
-            {
-                Destroy(h);
-            }
-
-            foreach (var h in m_SpecialHeartPool)
-            {
-                Destroy(h);
-            }
-        }
+        m_IsValid = state == E_INGAME_STATE.GAME;
     }
 }

@@ -29,6 +29,7 @@ public class EnemyPuniGenerator : MonoBehaviour
 
     private GenerateUnitActData[] m_GenerateActDatas;
     private List<EnemyPuniController> m_PuniPool;
+    private bool m_IsValid;
 
     #endregion
 
@@ -56,11 +57,13 @@ public class EnemyPuniGenerator : MonoBehaviour
             data.NextGenerateTimeCount = 0;
             m_GenerateActDatas[i] = data;
         }
+
+        InGameManager.Instance.ChangeStateAction += OnChangeState;
     }
 
     private void Update()
     {
-        if (InGameManager.Instance == null)
+        if (InGameManager.Instance == null || !m_IsValid)
         {
             return;
         }
@@ -135,5 +138,10 @@ public class EnemyPuniGenerator : MonoBehaviour
         puniT.position = new Vector3(m_Parameter.GetX(), -1000, m_Parameter.InitZPos);
 
         puni.OnGenerated(m_Parameter.GetGeneratedData(), data.GetMoveSpeed(playerSkill), data.Damage);
+    }
+
+    private void OnChangeState(E_INGAME_STATE state)
+    {
+        m_IsValid = state == E_INGAME_STATE.GAME;
     }
 }

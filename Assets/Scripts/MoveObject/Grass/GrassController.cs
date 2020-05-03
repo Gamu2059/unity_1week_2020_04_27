@@ -46,8 +46,9 @@ public class GrassController : MonoBehaviour
 
     private void Update()
     {
+        var ts = InGameManager.Instance.TimeScale;
         var pos = transform.position;
-        pos.z += m_MoveSpeed * Time.deltaTime;
+        pos.z += m_MoveSpeed * Time.deltaTime * ts;
 
         if (GroundManager.Instance != null)
         {
@@ -59,15 +60,7 @@ public class GrassController : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        //if (GroundManager.Instance != null)
-        //{
-        //    var rot = Quaternion.Euler(GroundManager.Instance.GetXAngle(transform.position.z) - 90, 0, 0);
-        //    transform.SetPositionAndRotation(pos, rot);
-        //}
-        //else
-        //{
-            transform.position = pos;
-        //}
+        transform.position = pos;
 
         ApplyProgress();
     }

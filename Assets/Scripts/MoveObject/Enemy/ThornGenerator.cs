@@ -29,6 +29,7 @@ public class ThornGenerator : MonoBehaviour
 
     private GenerateUnitActData[] m_GenerateActDatas;
     private List<ThornController> m_ThornPool;
+    private bool m_IsValid;
 
     #endregion
 
@@ -56,11 +57,13 @@ public class ThornGenerator : MonoBehaviour
             data.NextGenerateTimeCount = 0;
             m_GenerateActDatas[i] = data;
         }
+
+        InGameManager.Instance.ChangeStateAction += OnChangeState;
     }
 
     private void Update()
     {
-        if (InGameManager.Instance == null)
+        if (InGameManager.Instance == null || !m_IsValid)
         {
             return;
         }
@@ -135,5 +138,10 @@ public class ThornGenerator : MonoBehaviour
         puniT.position = new Vector3(data.GetX(), m_Parameter.InitYPos, m_Parameter.GetZ());
 
         puni.OnGenerated(data.GetMoveSpeed(playerSkill), data.GetXMoveSpeed(), data.Damage, m_Parameter.GradientSet, m_Parameter.ShadowGradientSet);
+    }
+
+    private void OnChangeState(E_INGAME_STATE state)
+    {
+        m_IsValid = state == E_INGAME_STATE.GAME;
     }
 }

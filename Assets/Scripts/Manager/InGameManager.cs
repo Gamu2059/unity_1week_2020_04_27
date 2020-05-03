@@ -66,6 +66,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     private StateMachine<E_INGAME_STATE, InGameManager> m_StateMachine;
 
+    public float TimeScale { get; private set; }
+
     #endregion
 
     #region Game Cycle
@@ -129,7 +131,12 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     private class TitleState : StateCycle
     {
-
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.TimeScale = 1;
+            AudioManager.Instance.PlayBGM(AudioManagerKeyWord.Game);
+        }
     }
 
     #endregion
@@ -141,6 +148,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
         public override void OnStart()
         {
             base.OnStart();
+            Target.TimeScale = 1;
         }
 
         public override void OnUpdate()
@@ -148,6 +156,12 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
             base.OnUpdate();
             var progress = Target.m_Progress;
             progress.Value = Mathf.Clamp01(progress.Value + 1f / Target.m_InGameDuration * Time.deltaTime);
+        }
+
+        public override void OnEnd()
+        {
+            AudioManager.Instance.StopBGM(AudioManagerKeyWord.Game, 1f);
+            base.OnEnd();
         }
     }
 
@@ -157,7 +171,11 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     private class GameOverState : StateCycle
     {
-
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.TimeScale = 0;
+        }
     }
 
     #endregion
@@ -166,7 +184,11 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     private class GameClearState : StateCycle
     {
-
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.TimeScale = 0;
+        }
     }
 
     #endregion
@@ -192,6 +214,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
         var gain = point * (int)Mathf.Log(m_Combo.Value + 2, 2);
         m_Closeness.Value += gain;
         m_Combo.Value++;
+        AudioManager.Instance.PlaySE(AudioManagerKeyWord.GainHeart);
     }
 
     public void GainSpecialHeart(int id, int maxCombo)
@@ -203,6 +226,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
     {
         m_Closeness.Value -= damage;
         m_Combo.Value = 0;
+        AudioManager.Instance.PlaySE(AudioManagerKeyWord.Damage);
     }
 
     /// <summary>

@@ -62,12 +62,12 @@ public class BackObjectController : MonoBehaviour
         if (InGameManager.Instance != null)
         {
             var progress = InGameManager.Instance.Progress.Value;
-                foreach (var s in m_GradientSet.Set)
-                {
-                    var c = s.GetColor(progress);
-                    m_MaterialPropBlock.SetColor(ShaderPropertyID.Instance.GetID(s.Name), c);
-                }
-                m_Renderer.SetPropertyBlock(m_MaterialPropBlock);
+            foreach (var s in m_GradientSet.Set)
+            {
+                var c = s.GetColor(progress);
+                m_MaterialPropBlock.SetColor(ShaderPropertyID.Instance.GetID(s.Name), c);
+            }
+            m_Renderer.SetPropertyBlock(m_MaterialPropBlock);
         }
     }
 }

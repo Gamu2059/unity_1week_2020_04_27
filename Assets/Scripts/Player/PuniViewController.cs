@@ -44,6 +44,9 @@ public class PuniViewController : MonoBehaviour
     [SerializeField]
     private SpriteRenderer m_ShadowRenderer;
 
+    [SerializeField]
+    private bool m_IsEnableJumpSe = false;
+
     [Space()]
     [Header("Init Option")]
 
@@ -170,5 +173,18 @@ public class PuniViewController : MonoBehaviour
             pos.z = isLookForward ? r.LookForwardOffsetZ : r.LookBackOffsetZ;
             r.Renderer.transform.localPosition = pos;
         }
+    }
+
+    public void OnJump()
+    {
+        if (m_IsEnableJumpSe)
+        {
+            AudioManager.Instance.PlaySE(AudioManagerKeyWord.Jump);
+        }
+    }
+
+    public void SetEnableJumpSe(bool isEnable)
+    {
+        m_IsEnableJumpSe = isEnable;
     }
 }

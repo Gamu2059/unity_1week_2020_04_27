@@ -226,10 +226,11 @@ public class InGameUiManager : MonoBehaviour
                 Target.m_GameOverAnimator.Play(START);
 
                 var progress = InGameManager.Instance.Progress.Value;
-                Target.m_ProgressReport.text = string.Format("しんこうど\n{0}%", progress);
+                Target.m_ProgressReport.text = string.Format("しんこうど\n{0}%", Mathf.RoundToInt(progress * 100f));
 
                 Observable.Timer(TimeSpan.FromSeconds(1.5f)).Subscribe(__ =>
                 {
+                    AudioManager.Instance.PlayBGM(AudioManagerKeyWord.GameOver);
                     Target.m_GameOverGroup.blocksRaycasts = true;
                     Target.m_GameOverToTitleButton.onClick.AddListener(OnClickToTitle);
                     Target.m_GameOverTwitterButton.onClick.AddListener(OnClickTwitter);
@@ -246,7 +247,7 @@ public class InGameUiManager : MonoBehaviour
         {
             var id = InGameManager.Instance.UnityRoomId;
             var progress = InGameManager.Instance.Progress.Value;
-            UnityRoomTweet.Tweet(id, string.Format("残念！ふられてしまいました...\nあなたは{0}%まで到達しました。", progress), "unityroom", "uniry1week");
+            UnityRoomTweet.Tweet(id, string.Format("残念！ふられてしまいました...\nあなたは{0}%まで到達しました。\n", Mathf.RoundToInt(progress * 100f)), "unityroom", "uniry1week");
         }
     }
 
@@ -271,6 +272,7 @@ public class InGameUiManager : MonoBehaviour
 
                     Observable.Timer(TimeSpan.FromSeconds(3f)).Subscribe(__ =>
                     {
+                        AudioManager.Instance.PlayBGM(AudioManagerKeyWord.GameClear);
                         Target.m_GameClearGroup.blocksRaycasts = true;
                         Target.m_GameClearToTitleButton.onClick.AddListener(OnClickToTitle);
                         Target.m_GameClearTwitterButton.onClick.AddListener(OnClickTwitter);
@@ -289,7 +291,7 @@ public class InGameUiManager : MonoBehaviour
         {
             var id = InGameManager.Instance.UnityRoomId;
             var closeness = InGameManager.Instance.Closeness.Value;
-            UnityRoomTweet.Tweet(id, string.Format("おめでとう！デートに成功しました！\nあなたの親密度は{0}です。", closeness), "unityroom", "uniry1week");
+            UnityRoomTweet.Tweet(id, string.Format("おめでとう！デートに成功しました！\nあなたの親密度は{0}です。\n", closeness), "unityroom", "uniry1week");
         }
 
         private void OnClickRanking()

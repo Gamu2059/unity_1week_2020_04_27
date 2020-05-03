@@ -373,7 +373,6 @@ GameObject:
   m_Component:
   - component: {fileID: 211758326}
   - component: {fileID: 211758328}
-  - component: {fileID: 211758327}
   m_Layer: 0
   m_Name: RakeCamera
   m_TagString: Untagged
@@ -395,14 +394,6 @@ Transform:
   m_Father: {fileID: 332980152}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &211758327
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211758325}
-  m_Enabled: 1
 --- !u!20 &211758328
 Camera:
   m_ObjectHideFlags: 0
@@ -1352,6 +1343,8 @@ GameObject:
   m_Component:
   - component: {fileID: 516666686}
   - component: {fileID: 516666685}
+  - component: {fileID: 516666687}
+  - component: {fileID: 516666688}
   m_Layer: 0
   m_Name: '[InGameManager]'
   m_TagString: Untagged
@@ -1373,7 +1366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UnityRoomId: puni_dating
   m_Camera: {fileID: 1362301383}
-  m_InGameDuration: 10
+  m_InGameDuration: 100
   m_Closeness:
     value: 0
   m_Progress:
@@ -1398,6 +1391,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &516666687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516666684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 597552482d32b244aa36f8a6bb624653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BgmMixer: {fileID: 0}
+  m_SeMixer: {fileID: 0}
+  m_MaxBGMSource: 2
+  m_AudioInfos:
+  - m_Name: Game
+    m_Clip: {fileID: 8300000, guid: 689063280f1f3b741bb3719f248628c9, type: 3}
+  - m_Name: Rain
+    m_Clip: {fileID: 8300000, guid: e98604945955b9f47a0ad82828f87ee8, type: 3}
+  - m_Name: GameClear
+    m_Clip: {fileID: 8300000, guid: 671ff9e33a153b142a321b263e14cdcb, type: 3}
+  - m_Name: GameOver
+    m_Clip: {fileID: 8300000, guid: ba80db7b2d19f7f4bb74c83898b4bd9c, type: 3}
+  - m_Name: Click
+    m_Clip: {fileID: 8300000, guid: 635a82d45c502bc439b9c7ed1d1da227, type: 3}
+  - m_Name: Jump
+    m_Clip: {fileID: 8300000, guid: cec99e64ef8d37f408223b1a815c9dfb, type: 3}
+  - m_Name: Damage
+    m_Clip: {fileID: 8300000, guid: c2a3ad640627ff346a45f8ac72e570c6, type: 3}
+  - m_Name: GainHeart
+    m_Clip: {fileID: 8300000, guid: 9693f2312ee5dbd4693be2abb39f8adb, type: 3}
+  - m_Name: ComboSpecial
+    m_Clip: {fileID: 8300000, guid: e051fde865801714380d2e7a889dfb0c, type: 3}
+--- !u!81 &516666688
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516666684}
+  m_Enabled: 1
 --- !u!1 &527025373
 GameObject:
   m_ObjectHideFlags: 0
@@ -3086,6 +3121,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsLookRibbon
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235698353027756238, guid: c0e052b9bb0e1c4479a67e380bb24660,
+        type: 3}
+      propertyPath: m_IsEnableJumpSe
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0e052b9bb0e1c4479a67e380bb24660, type: 3}
@@ -7589,6 +7629,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_InitBody2Color.a
       value: 0.19607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235698353027756238, guid: c0e052b9bb0e1c4479a67e380bb24660,
+        type: 3}
+      propertyPath: m_IsEnableJumpSe
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7683418555931467641, guid: c0e052b9bb0e1c4479a67e380bb24660,
         type: 3}
