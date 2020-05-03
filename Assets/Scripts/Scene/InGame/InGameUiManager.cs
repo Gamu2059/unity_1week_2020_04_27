@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using System;
+using naichilab;
 
 public class InGameUiManager : MonoBehaviour
 {
     #region Define
+
+    private const string START = "Start";
+    private const string END = "End";
 
     private class StateCycle : StateCycleBase<InGameUiManager, E_INGAME_STATE> { }
 
@@ -91,6 +96,15 @@ public class InGameUiManager : MonoBehaviour
     [SerializeField]
     private Image m_RenderImage;
 
+    [Header("Other")]
+
+    [SerializeField]
+    private float m_WaitGameOverPerformanceTime;
+
+    [SerializeField]
+
+    private float m_WaitGameClearPerformanceTime;
+
     #endregion
 
     #region Field
@@ -121,6 +135,14 @@ public class InGameUiManager : MonoBehaviour
 
         //InGameManager.Instance.Closeness.Subscribe(x => m_ClosenessIndicator.text = x.ToString());
         //InGameManager.Instance.Progress.Subscribe(x => m_Progress.value = x);
+        m_TitleGroup.alpha = 0;
+        m_TitleGroup.blocksRaycasts = false;
+        m_InGameGroup.alpha = 0;
+        m_InGameGroup.blocksRaycasts = false;
+        m_GameOverGroup.alpha = 0;
+        m_GameOverGroup.blocksRaycasts = false;
+        m_GameClearGroup.alpha = 0;
+        m_GameClearGroup.blocksRaycasts = false;
     }
 
     private void Update()
@@ -135,31 +157,34 @@ public class InGameUiManager : MonoBehaviour
         m_StateMachine?.Goto(state);
     }
 
-    private void ChangeToTitle()
-    {
-
-    }
-
-    private void ChangeToGame()
-    {
-
-    }
-
-    private void ChangeToGameOver()
-    {
-
-    }
-
-    private void ChangeToGameClear()
-    {
-
-    }
     #region Title State
 
     private class TitleState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_TitleAnimator.Play(START);
 
+            Observable.Timer(TimeSpan.FromSeconds(1.5f)).Subscribe(_ =>
+            {
+                Target.m_TitleGroup.blocksRaycasts = true;
+                Target.m_TitlePlayButton.onClick.AddListener(OnClickPlay);
+            }).AddTo(Target);
+        }
+
+        public override void OnEnd()
+        {
+            Target.m_TitleGroup.blocksRaycasts = false;
+            Target.m_TitleAnimator.Play(END);
+            base.OnEnd();
+        }
+        private void OnClickPlay()
+        {
+            InGameManager.Instance.GameStart();
+        }
     }
+
 
     #endregion
 
@@ -167,11 +192,22 @@ public class InGameUiManager : MonoBehaviour
 
     private class GameState : StateCycle
     {
-        public override void OnUpdate()
+        public override void OnStart()
         {
-            base.OnUpdate();
-            //var progress = Target.m_Progress;
-            //progress.Value = Mathf.Clamp01(progress.Value + 1f / Target.m_InGameDuration * Time.deltaTime);
+            base.OnStart();
+            Target.m_InGameAnimator.Play(START);
+            Target.m_ProgressBar.value = 0;
+
+            InGameManager.Instance.Progress.Subscribe(x => Target.m_ProgressBar.value = x);
+            InGameManager.Instance.Closeness.Subscribe(x => Target.m_ClosenessIndicator.text = x.ToString());
+            InGameManager.Instance.Combo.Subscribe(x => Target.m_ComboIndicator.text = x.ToString());
+            InGameManager.Instance.SpecialCombo.Subscribe(x => Target.m_ComboSpecialIndicator.text = x.ToString());
+        }
+
+        public override void OnEnd()
+        {
+            base.OnEnd();
+            Target.m_InGameAnimator.Play(END);
         }
     }
 
@@ -181,7 +217,37 @@ public class InGameUiManager : MonoBehaviour
 
     private class GameOverState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
 
+            Observable.Timer(TimeSpan.FromSeconds(Target.m_WaitGameOverPerformanceTime)).Subscribe(_ =>
+            {
+                Target.m_GameOverAnimator.Play(START);
+
+                var progress = InGameManager.Instance.Progress.Value;
+                Target.m_ProgressReport.text = string.Format("しんこうど\n{0}%", progress);
+
+                Observable.Timer(TimeSpan.FromSeconds(1.5f)).Subscribe(__ =>
+                {
+                    Target.m_GameOverGroup.blocksRaycasts = true;
+                    Target.m_GameOverToTitleButton.onClick.AddListener(OnClickToTitle);
+                    Target.m_GameOverTwitterButton.onClick.AddListener(OnClickTwitter);
+                }).AddTo(Target);
+            }).AddTo(Target);
+        }
+
+        private void OnClickToTitle()
+        {
+            InGameManager.Instance.ToTitle();
+        }
+
+        private void OnClickTwitter()
+        {
+            var id = InGameManager.Instance.UnityRoomId;
+            var progress = InGameManager.Instance.Progress.Value;
+            UnityRoomTweet.Tweet(id, string.Format("残念！ふられてしまいました...\nあなたは{0}%まで到達しました。", progress), "unityroom", "uniry1week");
+        }
     }
 
     #endregion
@@ -190,7 +256,65 @@ public class InGameUiManager : MonoBehaviour
 
     private class GameClearState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
 
+            Observable.Timer(TimeSpan.FromSeconds(Target.m_WaitGameClearPerformanceTime)).Subscribe(_ =>
+            {
+                Target.StartCreateScreenShot(tex =>
+                {
+                    Target.m_RenderImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+                    var closeness = InGameManager.Instance.Closeness.Value;
+                    Target.m_ScoreReport.text = closeness.ToString();
+                    Target.m_GameClearAnimator.Play(START);
+
+                    Observable.Timer(TimeSpan.FromSeconds(3f)).Subscribe(__ =>
+                    {
+                        Target.m_GameClearGroup.blocksRaycasts = true;
+                        Target.m_GameClearToTitleButton.onClick.AddListener(OnClickToTitle);
+                        Target.m_GameClearTwitterButton.onClick.AddListener(OnClickTwitter);
+                        Target.m_RankingButton.onClick.AddListener(OnClickRanking);
+                    }).AddTo(Target);
+                });
+            }).AddTo(Target);
+        }
+
+        private void OnClickToTitle()
+        {
+            InGameManager.Instance.ToTitle();
+        }
+
+        private void OnClickTwitter()
+        {
+            var id = InGameManager.Instance.UnityRoomId;
+            var closeness = InGameManager.Instance.Closeness.Value;
+            UnityRoomTweet.Tweet(id, string.Format("おめでとう！デートに成功しました！\nあなたの親密度は{0}です。", closeness), "unityroom", "uniry1week");
+        }
+
+        private void OnClickRanking()
+        {
+            InGameManager.Instance.SendScoreAndShowRanking();
+        }
+    }
+
+    private void StartCreateScreenShot(Action<Texture2D> onComp = null)
+    {
+        StartCoroutine(CreateScreenShot(onComp));
+    }
+
+    private IEnumerator CreateScreenShot(Action<Texture2D> onComp = null)
+    {
+        yield return new WaitForEndOfFrame();
+
+        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        var cam = InGameManager.Instance.Camera;
+        cam.targetTexture = renderTexture;
+        var tex = new Texture2D(cam.targetTexture.width, cam.targetTexture.height, TextureFormat.RGB24, false);
+        tex.ReadPixels(new Rect(0, 0, cam.targetTexture.width, cam.targetTexture.height), 0, 0);
+        tex.Apply();
+        cam.targetTexture = null;
+        onComp?.Invoke(tex);
     }
 
     #endregion

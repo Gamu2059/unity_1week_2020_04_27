@@ -24,6 +24,13 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     #region Field Inspector
 
+    [SerializeField]
+    private string m_UnityRoomId = "puni_dating";
+    public string UnityRoomId => m_UnityRoomId;
+
+    [SerializeField]
+    private Camera m_Camera;
+    public Camera Camera => m_Camera;
 
     #endregion
 
@@ -48,6 +55,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     [SerializeField, Tooltip("スペシャルコンボ数")]
     private IntReactiveProperty m_SpecialCombo;
+    public IntReactiveProperty SpecialCombo => m_SpecialCombo;
 
     [SerializeField, Tooltip("プレイ指標")]
     private IntReactiveProperty m_PlayerSkill;
@@ -86,6 +94,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
         m_Closeness.Subscribe(_ => UpdatePlayerSkill());
         m_Closeness.Subscribe(_ => CheckGameOver());
+        m_Progress.Subscribe(_ => CheckGameClear());
         m_Combo.Subscribe(_ => UpdatePlayerSkill());
 
         UpdatePlayerSkill();
@@ -129,6 +138,11 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     private class GameState : StateCycle
     {
+        public override void OnStart()
+        {
+            base.OnStart();
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -160,6 +174,16 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
     private void RequestChangeState(E_INGAME_STATE state)
     {
         m_StateMachine?.Goto(state);
+    }
+
+    public void ToTitle()
+    {
+        SceneManager.LoadScene("InGame");
+    }
+
+    public void GameStart()
+    {
+        RequestChangeState(E_INGAME_STATE.GAME);
     }
 
 
@@ -195,8 +219,15 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
     {
         if (m_Closeness.Value <= 0)
         {
-            Debug.Log("ゲームオーバー");
-            SceneManager.LoadScene("InGame");
+            RequestChangeState(E_INGAME_STATE.GAME_OVER);
+        }
+    }
+
+    private void CheckGameClear()
+    {
+        if (m_Progress.Value >= 1)
+        {
+            RequestChangeState(E_INGAME_STATE.GAME_CLEAR);
         }
     }
 
