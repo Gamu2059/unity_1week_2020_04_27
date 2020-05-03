@@ -26,7 +26,7 @@ MonoBehaviour:
     m_GradientSet: {fileID: 11400000, guid: aadc2437b9aa026489a245b596053ce6, type: 2}
   m_UnitParameters:
   - m_BeginProgress: 0
-    m_EndProgress: 0.99
+    m_EndProgress: 0.7
     m_Prefabs:
     - {fileID: 8678044611305848440, guid: 85837350dcb465f4fa86b1d6b616c7a1, type: 3}
     - {fileID: 168493888064145021, guid: 69e1b2734f390104abac7b84df14d307, type: 3}

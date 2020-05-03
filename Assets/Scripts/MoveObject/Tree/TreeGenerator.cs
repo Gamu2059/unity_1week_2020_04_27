@@ -122,10 +122,6 @@ public class TreeGenerator : MonoBehaviour
             tree = Instantiate(prefab);
             list.Add(tree);
         }
-        else
-        {
-            tree.gameObject.SetActive(true);
-        }
 
         return tree;
     }
@@ -149,12 +145,15 @@ public class TreeGenerator : MonoBehaviour
             tree.SetGradientSet(data.GradientSet);
             tree.SetAlphaCurve(data.AlphaCurve);
             tree.ResetTimeCount();
+            tree.ApplyProgress();
 
             var grassT = tree.transform;
             grassT.SetParent(transform);
 
             // 絶対見えない場所に置く
             grassT.position = new Vector3(data.GetX(), data.GetY(), data.GetZ());
+
+            tree.gameObject.SetActive(true);
         }
     }
 
@@ -175,11 +174,14 @@ public class TreeGenerator : MonoBehaviour
         tree.SetGradientSet(data.GradientSet);
         tree.SetAlphaCurve(data.AlphaCurve);
         tree.ResetTimeCount();
+        tree.ApplyProgress();
 
         var grassT = tree.transform;
         grassT.SetParent(transform);
 
         // 絶対見えない場所に置く
         grassT.position = new Vector3(data.GetX(), data.GetY(), m_Parameter.UnitDataZPos);
+
+        tree.gameObject.SetActive(true);
     }
 }

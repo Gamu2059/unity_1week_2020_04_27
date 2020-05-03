@@ -108,6 +108,11 @@ public class HeartGenerator : MonoBehaviour
         var progress = InGameManager.Instance.Progress.Value;
         var playerSkill = InGameManager.Instance.PlayerSkill.Value;
 
+        if (progress >= m_Parameter.EndProgress)
+        {
+            return;
+        }
+
         if (m_GenerateActData != null)
         {
             if (m_GenerateActData.NextGenerateTimeCount >= m_GenerateActData.NextGenerateTime)

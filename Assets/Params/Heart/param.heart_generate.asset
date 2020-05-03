@@ -16,6 +16,7 @@ MonoBehaviour:
     type: 3}
   m_SpecialHeartPrefab: {fileID: 6492360050352965598, guid: d7e4f5a289693a841a67ee9c932613c9,
     type: 3}
+  m_EndProgress: 0.88
   m_HeartPoint: 1
   m_SpecialHeartPoint: 3
   m_UnitParameter:

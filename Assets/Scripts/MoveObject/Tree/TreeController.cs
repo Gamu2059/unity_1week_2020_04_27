@@ -68,7 +68,7 @@ public class TreeController : MonoBehaviour
 
     #endregion
 
-    private void ApplyProgress()
+    public void ApplyProgress()
     {
         if (InGameManager.Instance != null)
         {

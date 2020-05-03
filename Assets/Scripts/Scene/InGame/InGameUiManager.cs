@@ -12,6 +12,7 @@ public class InGameUiManager : MonoBehaviour
 
     private const string START = "Start";
     private const string END = "End";
+    private const string PERFECT_GAIN = "PerfectGain";
 
     private class StateCycle : StateCycleBase<InGameUiManager, E_INGAME_STATE> { }
 
@@ -55,6 +56,15 @@ public class InGameUiManager : MonoBehaviour
 
     [SerializeField]
     private Slider m_ProgressBar;
+
+    [SerializeField]
+    private Animator m_PerfectGainLabel;
+
+    [SerializeField]
+    private CanvasGroup m_ComboSpecialGroup;
+
+    [SerializeField]
+    private AnimationCurve m_ComboSpecialAlphaCurve;
 
     [Header("Game Over")]
 
@@ -192,6 +202,9 @@ public class InGameUiManager : MonoBehaviour
 
     private class GameState : StateCycle
     {
+        private float m_TimeCount;
+        private bool m_IsValidAlphaAnimation;
+
         public override void OnStart()
         {
             base.OnStart();
@@ -201,13 +214,42 @@ public class InGameUiManager : MonoBehaviour
             InGameManager.Instance.Progress.Subscribe(x => Target.m_ProgressBar.value = x);
             InGameManager.Instance.Closeness.Subscribe(x => Target.m_ClosenessIndicator.text = x.ToString());
             InGameManager.Instance.Combo.Subscribe(x => Target.m_ComboIndicator.text = x.ToString());
-            InGameManager.Instance.SpecialCombo.Subscribe(x => Target.m_ComboSpecialIndicator.text = x.ToString());
+            InGameManager.Instance.SpecialHeartGainCount.Subscribe(x => IndicateComboSpecial(x));
+            InGameManager.Instance.PerfectGainAction += () => Target.m_PerfectGainLabel.Play(PERFECT_GAIN);
+
+            m_TimeCount = 0;
+            m_IsValidAlphaAnimation = false;
+            ApplyAlpha(0);
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (m_IsValidAlphaAnimation)
+            {
+                m_TimeCount += Time.deltaTime;
+                var a = Target.m_ComboSpecialAlphaCurve.Evaluate(m_TimeCount);
+                ApplyAlpha(a);
+            }
         }
 
         public override void OnEnd()
         {
             base.OnEnd();
             Target.m_InGameAnimator.Play(END);
+        }
+
+        private void IndicateComboSpecial(int x)
+        {
+            m_TimeCount = 0;
+            m_IsValidAlphaAnimation = true;
+            Target.m_ComboSpecialIndicator.text = x.ToString();
+        }
+
+        private void ApplyAlpha(float alpha)
+        {
+            Target.m_ComboSpecialGroup.alpha = alpha;
         }
     }
 

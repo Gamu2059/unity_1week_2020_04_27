@@ -15,6 +15,10 @@ public class HeartGenerateParameter : ScriptableObject
     public HeartController SpecialHeartPrefab => m_SpecialHeartPrefab;
 
     [SerializeField]
+    private float m_EndProgress;
+    public float EndProgress => m_EndProgress;
+
+    [SerializeField]
     private int m_HeartPoint;
     public int HeartPoint => m_HeartPoint;
 

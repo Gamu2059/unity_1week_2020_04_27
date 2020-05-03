@@ -32,6 +32,9 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
     private Camera m_Camera;
     public Camera Camera => m_Camera;
 
+    [SerializeField]
+    private int m_PerfectGainPoint;
+
     #endregion
 
     #region Field
@@ -54,15 +57,16 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
     public IntReactiveProperty Combo => m_Combo;
 
     [SerializeField, Tooltip("スペシャルコンボ数")]
-    private IntReactiveProperty m_SpecialCombo;
-    public IntReactiveProperty SpecialCombo => m_SpecialCombo;
+    private IntReactiveProperty m_SpecialHeartGainCount;
+    public IntReactiveProperty SpecialHeartGainCount => m_SpecialHeartGainCount;
 
     [SerializeField, Tooltip("プレイ指標")]
     private IntReactiveProperty m_PlayerSkill;
     public IntReactiveProperty PlayerSkill => m_PlayerSkill;
 
+    public Action PerfectGainAction;
+
     private int m_SpecialHeartId;
-    private int m_SpecialHeartGainCount;
 
     private StateMachine<E_INGAME_STATE, InGameManager> m_StateMachine;
 
@@ -93,8 +97,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
         m_Progress = new FloatReactiveProperty(0);
         m_PlayerSkill = new IntReactiveProperty();
         m_Combo = new IntReactiveProperty();
-        m_SpecialCombo = new IntReactiveProperty();
-        m_SpecialHeartId = 0;
+        m_SpecialHeartGainCount = new IntReactiveProperty();
+        m_SpecialHeartId = -1;
 
         m_Closeness.Subscribe(_ => UpdatePlayerSkill());
         m_Closeness.Subscribe(_ => CheckGameOver());
@@ -110,7 +114,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
 
     protected override void OnDestroyed()
     {
-        m_SpecialCombo.Dispose();
+        m_SpecialHeartGainCount.Dispose();
         m_Combo.Dispose();
         m_PlayerSkill.Dispose();
         m_Progress.Dispose();
@@ -212,18 +216,45 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallbac
         RequestChangeState(E_INGAME_STATE.GAME);
     }
 
-
-    public void GainHeart(int point)
+    private void AddScore(int point)
     {
         var gain = point * (int)Mathf.Log(m_Combo.Value + 2, 2);
         m_Closeness.Value += gain;
         m_Combo.Value++;
+    }
+
+    public void GainHeart(int point)
+    {
+        AddScore(point);
         AudioManager.Instance.PlaySE(AudioManagerKeyWord.GainHeart);
     }
 
     public void GainSpecialHeart(int id, int maxCombo)
     {
+        if (id > m_SpecialHeartId)
+        {
+            // 1個目として初期化
+            m_SpecialHeartGainCount.Value = 1;
+            m_SpecialHeartId = id;
+        }
+        else if (id == m_SpecialHeartId)
+        {
+            // 2個目以降
+            m_SpecialHeartGainCount.Value++;
+        }
 
+        if (m_SpecialHeartGainCount.Value >= maxCombo)
+        {
+            // 黄色のperfect gain発動
+            PerfectSpecialGain();
+        }
+    }
+
+    private void PerfectSpecialGain()
+    {
+        AddScore(m_PerfectGainPoint);
+        AudioManager.Instance.PlaySE(AudioManagerKeyWord.ComboSpecial);
+        PerfectGainAction?.Invoke();
     }
 
     public void Damaged(int damage)
