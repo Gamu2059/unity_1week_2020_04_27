@@ -3,17 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UniRx;
+using System;
 
 /// <summary>
 /// インゲームのデータを保持するマネージャ
 /// </summary>
-public class InGameManager : SingletonMonoBehavior<InGameManager>
+public class InGameManager : SingletonMonoBehavior<InGameManager>, IStateCallback<E_INGAME_STATE>
 {
+    #region Define
+
+    private class StateCycle : StateCycleBase<InGameManager, E_INGAME_STATE> { }
+
+    private class InnerState : State<E_INGAME_STATE, InGameManager>
+    {
+        public InnerState(E_INGAME_STATE state, InGameManager target) : base(state, target) { }
+        public InnerState(E_INGAME_STATE state, InGameManager target, StateCycle cycle) : base(state, target, cycle) { }
+    }
+
+    #endregion
+
     #region Field Inspector
+
 
     #endregion
 
     #region Field
+
+    public Action<E_INGAME_STATE> ChangeStateAction { get; set; }
 
     [SerializeField, Tooltip("ゲーム時間")]
     private float m_InGameDuration;
@@ -40,6 +56,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
     private int m_SpecialHeartId;
     private int m_SpecialHeartGainCount;
 
+    private StateMachine<E_INGAME_STATE, InGameManager> m_StateMachine;
+
     #endregion
 
     #region Game Cycle
@@ -48,7 +66,16 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
     {
         base.OnAwake();
 
-        ShaderPropertyID.Create();
+        if (ShaderPropertyID.Instance == null)
+        {
+            ShaderPropertyID.Create();
+        }
+
+        m_StateMachine = new StateMachine<E_INGAME_STATE, InGameManager>();
+        m_StateMachine.AddState(new InnerState(E_INGAME_STATE.TITLE, this, new TitleState()));
+        m_StateMachine.AddState(new InnerState(E_INGAME_STATE.GAME, this, new GameState()));
+        m_StateMachine.AddState(new InnerState(E_INGAME_STATE.GAME_OVER, this, new GameOverState()));
+        m_StateMachine.AddState(new InnerState(E_INGAME_STATE.GAME_CLEAR, this, new GameClearState()));
 
         m_Closeness = new IntReactiveProperty(100);
         m_Progress = new FloatReactiveProperty(0);
@@ -62,6 +89,8 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
         m_Combo.Subscribe(_ => UpdatePlayerSkill());
 
         UpdatePlayerSkill();
+
+        RequestChangeState(E_INGAME_STATE.TITLE);
     }
 
     protected override void OnDestroyed()
@@ -72,6 +101,9 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
         m_Progress.Dispose();
         m_Closeness.Dispose();
 
+        m_StateMachine.OnFinalize();
+        m_StateMachine = null;
+
         ShaderPropertyID.Instance?.OnFinalize();
 
         base.OnDestroyed();
@@ -79,10 +111,57 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
 
     private void Update()
     {
-        m_Progress.Value = Mathf.Clamp01(m_Progress.Value + 1f / m_InGameDuration * Time.deltaTime);
+        m_StateMachine?.OnUpdate();
     }
 
     #endregion
+
+    #region Title State
+
+    private class TitleState : StateCycle
+    {
+
+    }
+
+    #endregion
+
+    #region Game State
+
+    private class GameState : StateCycle
+    {
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            var progress = Target.m_Progress;
+            progress.Value = Mathf.Clamp01(progress.Value + 1f / Target.m_InGameDuration * Time.deltaTime);
+        }
+    }
+
+    #endregion
+
+    #region Game Over State
+
+    private class GameOverState : StateCycle
+    {
+
+    }
+
+    #endregion
+
+    #region Game Clear State
+
+    private class GameClearState : StateCycle
+    {
+
+    }
+
+    #endregion
+
+    private void RequestChangeState(E_INGAME_STATE state)
+    {
+        m_StateMachine?.Goto(state);
+    }
+
 
     public void GainHeart(int point)
     {
@@ -107,7 +186,7 @@ public class InGameManager : SingletonMonoBehavior<InGameManager>
     /// </summary>
     private void UpdatePlayerSkill()
     {
-        var closeness = (int) Mathf.Max(0, Mathf.Log10(m_Closeness.Value + 1));
+        var closeness = (int)Mathf.Max(0, Mathf.Log10(m_Closeness.Value + 1));
         var combo = (int)Mathf.Max(0, Mathf.Log(m_Combo.Value + 1, 2));
         m_PlayerSkill.Value = closeness + combo;
     }
