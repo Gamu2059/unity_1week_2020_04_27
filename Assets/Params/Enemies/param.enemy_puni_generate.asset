@@ -64,7 +64,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    m_Damage: 1000
+    m_Damage: 1
   m_GeneratedDatas:
   - m_IsLookRibbon: 0
     m_Body1Color: {r: 0.94234604, g: 0.9622642, b: 0.26779994, a: 1}

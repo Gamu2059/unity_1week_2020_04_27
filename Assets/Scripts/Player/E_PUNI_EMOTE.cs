@@ -7,4 +7,6 @@ public enum E_PUNI_EMOTE
     NORMAL,
     DAMAGED,
     ANGRY,
+    STUNNED,
+    LOVE,
 }

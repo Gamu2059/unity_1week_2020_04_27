@@ -287,6 +287,7 @@ public class EnemyPuniController : MonoBehaviour, IMoveObject
 
         m_IsCollided = true;
         RequestChangeState(E_STATE.DAMAGED);
+        puni.KnockBack();
 
         if (InGameManager.Instance != null)
         {

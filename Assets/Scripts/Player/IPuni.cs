@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IPuni
 {
     bool IsBluePuni { get; }
+
+    void KnockBack();
 }

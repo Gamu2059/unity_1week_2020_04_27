@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UniRx;
 
 public class BluePuniController : ControllableMonoBehavior, IPuni
 {
@@ -12,6 +13,8 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
     private const string WALK = "Puni@walk";
+    private const string DAMAGED = "Puni@damaged";
+    private const string STOP = "Puni@stop";
 
     private enum E_STATE
     {
@@ -38,7 +41,22 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         /// <summary>
         /// 1人でいる時に、赤プニを離した
         /// </summary>
-        ALONE_LEAVE
+        ALONE_LEAVE,
+
+        /// <summary>
+        /// 障害物に当たった時
+        /// </summary>
+        DAMAGED,
+
+        /// <summary>
+        /// ゲームオーバーになった時
+        /// </summary>
+        GAME_OVER,
+
+        /// <summary>
+        /// ゲームクリアになった時
+        /// </summary>
+        GAME_CLEAR,
     }
 
     private class StateCycle : StateCycleBase<BluePuniController, E_STATE> { }
@@ -97,6 +115,9 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     public bool IsBluePuni => true;
 
+    private bool m_IsGameOver;
+    private bool m_IsGameClear;
+
     #endregion
 
     #region Game Cycle
@@ -111,12 +132,17 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         m_StateMachine.AddState(new InnerState(E_STATE.ALONE_LEAVE, this, new AloneLeaveState()));
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE, this, new CoupleState()));
         m_StateMachine.AddState(new InnerState(E_STATE.COUPLE_SLIDE, this, new CoupleSlideState()));
+        m_StateMachine.AddState(new InnerState(E_STATE.DAMAGED, this, new DamagedState()));
+        m_StateMachine.AddState(new InnerState(E_STATE.GAME_OVER, this, new GameOverState()));
+        m_StateMachine.AddState(new InnerState(E_STATE.GAME_CLEAR, this, new GameClearState()));
 
         m_PuniTrigger.TriggerEnterAction += OnEnterMoveObjectTrigger;
 
         m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
         m_ViewController.SetLook(E_PUNI_LOOK_DIR.FORWARD);
         m_ViewController.SetView(0);
+
+        InGameManager.Instance.ChangeStateAction += OnChangeState;
 
         RequestChangeState(E_STATE.COUPLE);
     }
@@ -415,10 +441,71 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
 
     #endregion
 
+    #region Damaged State
+
+    private class DamagedState : StateCycle
+    {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_PuniTrigger.SetEnableCollider(false);
+            Target.m_Animator.Play(DAMAGED);
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.DAMAGED);
+            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
+            {
+                Target.m_PuniTrigger.SetEnableCollider(true);
+                Target.m_ViewController.SetEmote(E_PUNI_EMOTE.NORMAL);
+                Target.RequestChangeState(E_STATE.ALONE);
+                Target.m_RedPuni.Alone();
+            }).AddTo(Target);
+        }
+    }
+
+    #endregion
+
+    #region Game Over State
+
+    private class GameOverState : StateCycle
+    {
+        public override void OnStart()
+        {
+            base.OnStart();
+            Target.m_Animator.Play(STOP);
+            Target.m_ViewController.SetEmote(E_PUNI_EMOTE.STUNNED);
+            Target.m_ViewController.SetLook(E_PUNI_LOOK_DIR.BACK);
+            Target.m_ViewController.UpdateView();
+        }
+    }
+
+    #endregion
+
+    #region Game Clear State
+
+    private class GameClearState : StateCycle
+    {
+
+    }
+
+    #endregion
+
     private void RequestChangeState(E_STATE state)
     {
         m_StateMachine?.Goto(state);
         m_State = state;
+    }
+
+    private void OnChangeState(E_INGAME_STATE state)
+    {
+        if (state == E_INGAME_STATE.GAME_CLEAR)
+        {
+            RequestChangeState(E_STATE.GAME_CLEAR);
+            m_IsGameClear = true;
+        }
+        else if (state == E_INGAME_STATE.GAME_OVER)
+        {
+            RequestChangeState(E_STATE.GAME_OVER);
+            m_IsGameOver = true;
+        }
     }
 
     #region Collider & Trigger
@@ -467,6 +554,11 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
         moveObj?.OnEnterPuni(this);
     }
 
+    public void KnockBack()
+    {
+        RequestChangeState(E_STATE.DAMAGED);
+    }
+
     #endregion
 
     #region View
@@ -492,6 +584,11 @@ public class BluePuniController : ControllableMonoBehavior, IPuni
     private void Walk()
     {
         m_Animator.Play(WALK);
+    }
+
+    public void Alone()
+    {
+        RequestChangeState(E_STATE.ALONE);
     }
 
     /// <summary>
